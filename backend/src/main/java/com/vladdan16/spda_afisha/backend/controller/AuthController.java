@@ -16,7 +16,7 @@ public class AuthController {
   @PostMapping("/sign_up")
   public ResponseEntity<Void> signUp(@RequestBody SignupRequest request) {
     // TODO: adjust this method according to API
-    authService.signUp(request.login(), request.password());
+    authService.signUp(request.login(), request.password(), request.role());
     return ResponseEntity.ok().build();
   }
 

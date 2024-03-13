@@ -15,7 +15,8 @@ import java.time.OffsetDateTime;
 public class JpaEventService implements EventService {
 
   @Override
-  public void createEvent(String name, String type, OffsetDateTime startAt, Long numberSeats, String description) {
+  public void createEvent(String name, String type, OffsetDateTime startAt,
+                          Long numberSeats, String description) {
     // TODO: implement createEvent
   }
 
