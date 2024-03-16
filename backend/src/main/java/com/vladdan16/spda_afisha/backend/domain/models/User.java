@@ -43,5 +43,5 @@ public class User {
       joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
       inverseJoinColumns = @JoinColumn(name = "event_id", referencedColumnName = "id")
   )
-  private List<Events> events;
+  private List<Event> events;
 }
