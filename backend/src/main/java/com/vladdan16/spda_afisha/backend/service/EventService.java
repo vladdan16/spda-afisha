@@ -1,7 +1,7 @@
 package com.vladdan16.spda_afisha.backend.service;
 
 import com.vladdan16.spda_afisha.backend.domain.models.EventType;
-import com.vladdan16.spda_afisha.backend.dto.responses.events.GetEventResponse;
+import com.vladdan16.spda_afisha.backend.dto.responses.events.EventResponse;
 import com.vladdan16.spda_afisha.backend.dto.responses.events.ListEventResponse;
 
 import java.sql.Timestamp;
@@ -17,12 +17,12 @@ public interface EventService {
 
   ListEventResponse listEvents();
 
-  void deleteEvent(String uuid);
+  void deleteEvent(Long id);
 
-  GetEventResponse getEvent(String uuid);
+  EventResponse getEvent(Long id);
 
   void updateEvent(
-      String id,
+      Long id,
       String name,
       String description,
       Timestamp startAt,

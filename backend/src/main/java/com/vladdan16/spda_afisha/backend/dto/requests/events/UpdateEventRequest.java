@@ -8,7 +8,7 @@ import java.sql.Timestamp;
 
 public record UpdateEventRequest(
     @NotNull
-    String id,
+    Long id,
     String name,
     String description,
     @JsonProperty("start_at")
