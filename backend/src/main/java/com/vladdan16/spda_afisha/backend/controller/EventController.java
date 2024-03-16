@@ -2,12 +2,19 @@ package com.vladdan16.spda_afisha.backend.controller;
 
 import com.vladdan16.spda_afisha.backend.dto.requests.events.CreateEventRequest;
 import com.vladdan16.spda_afisha.backend.dto.requests.events.UpdateEventRequest;
-import com.vladdan16.spda_afisha.backend.dto.responses.events.GetEventResponse;
+import com.vladdan16.spda_afisha.backend.dto.responses.events.EventResponse;
 import com.vladdan16.spda_afisha.backend.dto.responses.events.ListEventResponse;
 import com.vladdan16.spda_afisha.backend.service.EventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/event")
@@ -37,14 +44,15 @@ public class EventController {
   }
 
   @DeleteMapping
-  public ResponseEntity<Void> deleteEvent(@RequestParam final String id) {
+  public ResponseEntity<Void> deleteEvent(@RequestParam final Long id) {
     eventService.deleteEvent(id);
     return ResponseEntity.ok().build();
   }
 
   @GetMapping
-  public GetEventResponse getEvent(@RequestParam final String id) {
-    return eventService.getEvent(id);
+  public ResponseEntity<EventResponse> getEvent(@RequestParam final Long id) {
+    var response = eventService.getEvent(id);
+    return ResponseEntity.ok(response);
   }
 
   @PatchMapping

@@ -1,21 +1,31 @@
 package com.vladdan16.spda_afisha.backend.domain.models;
 
-import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.sql.Timestamp;
 import java.util.List;
 
 @Entity
-@Table(name = "events")
+@Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Event {
   @Id
-  private String id;
+  @GeneratedValue(strategy = GenerationType.SEQUENCE)
+  private Long id;
 
   private String name;
 
@@ -28,6 +38,8 @@ public class Event {
   @Enumerated(EnumType.STRING)
   private EventType type;
 
-  @ManyToMany(mappedBy = "events")
+  @ToString.Exclude
+  @JsonIgnore
+  @ManyToMany(mappedBy = "event")
   private List<User> users;
 }

@@ -5,8 +5,8 @@ import com.vladdan16.spda_afisha.backend.domain.models.EventType;
 
 import java.sql.Timestamp;
 
-public record GetEventResponse(
-    String id,
+public record EventResponse(
+    Long id,
     String name,
     String description,
     Timestamp startAt,
