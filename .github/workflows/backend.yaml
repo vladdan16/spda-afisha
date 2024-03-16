@@ -1,0 +1,42 @@
+name: Build backend
+
+on:
+  push:
+    paths:
+      - 'backend/**'
+      - '.github/workflows/backend.yaml'
+    branches: [ "main", "backend" ]
+  pull_request:
+    paths:
+      - 'backend/**'
+      - '.github/workflows/backend.yaml'
+    branches: [ "main", "backend" ]
+
+jobs:
+  build:
+    
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'oracle'
+          cache: gradle
+
+      - name: Run checkstyle
+        run: gradle -p backend checkstyleMain
+
+      - name: Upload checkstyle report
+        uses: actions/upload-artifact@v4
+        with:
+          name: checkstyle-bot-report
+          path: backend/build/reports/checkstyle/main.html
+                                                                    
+      - name: Build with Gradle                                     
+        run: gradle -p backend build
+
