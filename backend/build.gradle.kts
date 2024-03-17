@@ -30,6 +30,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-configuration-processor")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.4.0")
 //    implementation("io.micrometer:micrometer-registry-prometheus:1.12.4")
 //    implementation("io.micrometer:micrometer-tracing-bridge-brave:1.2.4")
 //    implementation("org.liquibase:liquibase-core")
