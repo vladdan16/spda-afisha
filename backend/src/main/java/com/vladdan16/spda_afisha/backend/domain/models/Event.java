@@ -8,11 +8,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -40,6 +36,6 @@ public class Event {
 
   @ToString.Exclude
   @JsonIgnore
-  @ManyToMany(mappedBy = "event")
+  @ManyToMany(mappedBy = "events")
   private List<User> users;
 }
