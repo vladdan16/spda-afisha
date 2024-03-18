@@ -1,0 +1,25 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:16.2
+    networks:
+      - back
+    environment:
+      POSTGRES_DB: 'mydatabase'
+      POSTGRES_USER: 'myuser'
+      POSTGRES_PASSWORD: 'secret'
+
+  backend:
+    image: ghcr.io/vladdan16/spda-afisha-backend:latest
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    networks:
+      - back
+    depends_on:
+      - postgres
+
+
+networks:
+  back:
