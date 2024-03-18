@@ -7,20 +7,28 @@ import com.vladdan16.spda_afisha.backend.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
-
 @Service
 @RequiredArgsConstructor
 public class JpaAuthService implements AuthService {
   private final UserRepository userRepository;
 
   @Override
-  public void signUp(String login, String password, UserRole role) {
-    // TODO: adjust according to API if needed
-    var id = UUID.randomUUID().toString();
-    var user = new User(id, login, password, role);
+  public void signUp(
+      String name,
+      String surname,
+      String login,
+      String password,
+      UserRole role
+  ) {
+    // TODO: save passwords using hash function
+    var user = User.builder()
+        .name(name)
+        .surname(surname)
+        .login(login)
+        .password(password)
+        .role(role)
+        .build();
     userRepository.save(user);
   }
-
   // TODO: implement other methods
 }

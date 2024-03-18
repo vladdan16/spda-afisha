@@ -1,13 +1,32 @@
 package com.vladdan16.spda_afisha.backend.service;
 
-import com.vladdan16.spda_afisha.backend.dto.responses.ListEventResponse;
+import com.vladdan16.spda_afisha.backend.domain.models.EventType;
+import com.vladdan16.spda_afisha.backend.dto.responses.events.EventResponse;
+import com.vladdan16.spda_afisha.backend.dto.responses.events.ListEventResponse;
 
-import java.time.OffsetDateTime;
+import java.sql.Timestamp;
 
 public interface EventService {
-  void createEvent(String name, String type, OffsetDateTime startAt, Long numberSeats, String description);
+  void createEvent(
+      String name,
+      String description,
+      Timestamp startAt,
+      Long numberSeats,
+      EventType type
+  );
 
   ListEventResponse listEvents();
 
-  // TODO: create other methods for events
+  void deleteEvent(Long id);
+
+  EventResponse getEvent(Long id);
+
+  void updateEvent(
+      Long id,
+      String name,
+      String description,
+      Timestamp startAt,
+      Long numberSeats,
+      EventType type
+  );
 }
