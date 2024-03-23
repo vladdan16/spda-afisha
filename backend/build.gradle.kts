@@ -31,6 +31,9 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-configuration-processor")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.4.0")
+    // security
+    implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation("com.google.firebase:firebase-admin:9.2.0")
 //    implementation("io.micrometer:micrometer-registry-prometheus:1.12.4")
 //    implementation("io.micrometer:micrometer-tracing-bridge-brave:1.2.4")
 //    implementation("org.liquibase:liquibase-core")
@@ -46,6 +49,7 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.springframework.security:spring-security-test")
     testImplementation("io.projectreactor:reactor-test")
 
     checkstyle("com.puppycrawl.tools:checkstyle:10.10.0")
