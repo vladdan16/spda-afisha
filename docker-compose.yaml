@@ -19,6 +19,10 @@ services:
       - back
     depends_on:
       - postgres
+    environment:
+      FIREBASE_SERVICE_ACCOUNT_KEY_PATH: "/var/spda-afisha-backend/serviceAccountKey.json"
+    volumes:
+      - ./serviceAccountKey.json:/var/spda-afisha-backend/serviceAccountKey.json
 
 
 networks:

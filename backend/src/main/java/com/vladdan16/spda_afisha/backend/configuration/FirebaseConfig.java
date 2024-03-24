@@ -5,10 +5,8 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.util.ResourceUtils;
 
 import javax.annotation.PostConstruct;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,8 +18,11 @@ public class FirebaseConfig {
   @PostConstruct
   public void firebaseInit() {
     try {
-      File file = ResourceUtils.getFile("classpath:serviceAccountKey.json");
-      InputStream serviceAccount = new FileInputStream(file);
+      String filePath = System.getenv("FIREBASE_SERVICE_ACCOUNT_KEY_PATH");
+      if (filePath == null || filePath.isEmpty()) {
+        throw new IllegalStateException("Environment variable FIREBASE_SERVICE_ACCOUNT_KEY_PATH not set");
+      }
+      InputStream serviceAccount = new FileInputStream(filePath);
       FirebaseOptions options = FirebaseOptions.builder()
           .setCredentials(GoogleCredentials.fromStream(serviceAccount))
           .build();
