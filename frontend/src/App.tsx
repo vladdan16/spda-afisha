@@ -13,13 +13,15 @@ export default function App() {
   //   - disallow /entry
   //   - 404 / disallowed - redirect to /feed
   return (
-    <>
+    <div className="flex flex-col h-screen">
       <Navigation />
-      <Routes>
-        <Route path="/entry" element={<EntryPage />} />
-        <Route path="/feed" element={<FeedPage />} />
-        <Route path="/dashboard" element={<DashboardPage />} />
-      </Routes>
-    </>
+      <div className="flex-grow">
+        <Routes>
+          <Route path="/entry" element={<EntryPage />} />
+          <Route path="/feed" element={<FeedPage />} />
+          <Route path="/dashboard" element={<DashboardPage />} />
+        </Routes>
+      </div>
+    </div>
   );
 }
