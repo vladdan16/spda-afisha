@@ -2,7 +2,6 @@ import { Route, Routes } from "react-router-dom";
 import DashboardPage from "./pages/DashboardPage";
 import FeedPage from "./pages/FeedPage";
 import EntryPage from "./pages/EntryPage";
-import { Navigation } from "./components/Navigation";
 
 export default function App() {
   // TODO:
@@ -11,17 +10,12 @@ export default function App() {
   // if logged in:
   //   - allow /feed /dashboard
   //   - disallow /entry
-  //   - 404 / disallowed - redirect to /feed
+  //   - 404 or disallowed /entry - redirect to /feed
   return (
-    <div className="flex flex-col h-screen">
-      <Navigation />
-      <div className="flex-grow">
-        <Routes>
-          <Route path="/entry" element={<EntryPage />} />
-          <Route path="/feed" element={<FeedPage />} />
-          <Route path="/dashboard" element={<DashboardPage />} />
-        </Routes>
-      </div>
-    </div>
+    <Routes>
+      <Route path="/entry" element={<EntryPage />} />
+      <Route path="/feed" element={<FeedPage />} />
+      <Route path="/dashboard" element={<DashboardPage />} />
+    </Routes>
   );
 }

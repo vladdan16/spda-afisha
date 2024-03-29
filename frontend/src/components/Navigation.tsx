@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-export function Navigation() {
+export function Navigation({ loggedIn }: { loggedIn: boolean }) {
   // TODO: log out, then goto /entry on Выйти
   return (
     <nav className="h-[100px] flex justify-between px-20 bg-white items-center">
@@ -9,18 +9,20 @@ export function Navigation() {
           Aфиша
         </div>
       </Link>
-      <div className="flex items-center">
-        <Link to="/dashboard" className="mr-8">
-          <div className="text-black text-[32px] font-bold font-Montserrat">
-            Мои ивенты
-          </div>
-        </Link>
-        <Link to="/entry">
-          <div className="text-black text-[32px] font-semibold font-Montserrat">
-            выйти
-          </div>
-        </Link>
-      </div>
+      {loggedIn && (
+        <div className="flex items-center">
+          <Link to="/dashboard" className="mr-8">
+            <div className="text-black text-[32px] font-bold font-Montserrat">
+              Мои ивенты
+            </div>
+          </Link>
+          <Link to="/entry">
+            <div className="text-black text-[32px] font-semibold font-Montserrat">
+              выйти
+            </div>
+          </Link>
+        </div>
+      )}
     </nav>
   );
 }
