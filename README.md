@@ -15,7 +15,7 @@ We have deployed a container with backend application to [Github Container Regis
 
 ### Hosted swagger
 
-[Here](http://62.84.112.199/swagger-ui/index.html) is you can find deployed swagger to test backend.
+[Here](http://51.250.91.163/swagger-ui/index.html) is you can find deployed swagger to test backend.
 
 ## Authorization
 
