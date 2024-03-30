@@ -1,35 +1,18 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Navigation } from "../components/Navigation";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { auth } from "../firebase";
-
-const ErrorModal: React.FC<{ message: string; onClose: () => void }> = ({
-  message,
-  onClose,
-}) => (
-  <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-    <div className="bg-white p-4 rounded-lg shadow-lg flex flex-col items-center">
-      <p className="text-red-500 text-lg font-bold">Ошибка</p>
-      <p className="mb-4">{message}</p>
-      <button
-        onClick={onClose}
-        className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-700 transition-colors"
-      >
-        Закрыть
-      </button>
-    </div>
-  </div>
-);
+import { ErrorModal } from "../components/ErrorModal";
+import { ModalContext } from "../context/ModalContext";
 
 export default function EntryPage() {
   const [isRegistered, setIsRegistered] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [showModal, setShowModal] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const modal = useContext(ModalContext);
 
   const toggleRegistration = () => {
     setIsRegistered((was) => !was);
@@ -45,18 +28,14 @@ export default function EntryPage() {
       console.log("Entered successfully!");
     } catch (error: any) {
       console.error("Authentication error: ", error);
-      setErrorMessage(error.message);
-      setShowModal(true);
+      modal.open(error.message);
     }
   };
-
-  // Function to close the modal
-  const closeModal = () => setShowModal(false);
 
   return (
     <div className="flex flex-col h-screen">
       <Navigation loggedIn={false} />
-      {showModal && <ErrorModal message={errorMessage} onClose={closeModal} />}
+      <ErrorModal />
       <div className="flex-grow">
         <div className="flex justify-center items-center h-full">
           <div className="flex justify-center items-center h-full">
