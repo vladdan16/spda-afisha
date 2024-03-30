@@ -1,5 +1,6 @@
 package com.vladdan16.spda_afisha.backend.service.jpa;
 
+import com.vladdan16.spda_afisha.backend.domain.exceptions.NotFoundException;
 import com.vladdan16.spda_afisha.backend.domain.repositories.EventRepository;
 import com.vladdan16.spda_afisha.backend.domain.repositories.UserRepository;
 import com.vladdan16.spda_afisha.backend.dto.responses.enrolls.ListEnrollResponse;
@@ -18,8 +19,15 @@ public class JpaEnrollService implements EnrollService {
 
   @Override
   public void createEnroll(String userId, Long eventId) {
-    var event = eventRepository.getReferenceById(eventId);
+    var event = eventRepository.getEventById(eventId);
+    if (event == null) {
+      throw new NotFoundException("Event not found", null);
+    }
     var user = userRepository.getUserById(userId);
+    if (user == null) {
+      throw new NotFoundException("User not found", null);
+    }
+
     // TODO: add check that user not in event
     user.getEvents().add(event);
     event.getUsers().add(user);
@@ -27,8 +35,14 @@ public class JpaEnrollService implements EnrollService {
 
   @Override
   public void deleteEnroll(String userId, Long eventId) {
-    var event = eventRepository.getReferenceById(eventId);
+    var event = eventRepository.getEventById(eventId);
+    if (event == null) {
+      throw new NotFoundException("Event not found", null);
+    }
     var user = userRepository.getUserById(userId);
+    if (user == null) {
+      throw new NotFoundException("User not found", null);
+    }
     //TODO: add check that user in event
     user.getEvents().remove(event);
     event.getUsers().remove(user);
@@ -37,6 +51,9 @@ public class JpaEnrollService implements EnrollService {
   @Override
   public ListEnrollResponse getEnrollsByUser(String userId) {
     var user = userRepository.getUserById(userId);
+    if (user == null) {
+      throw new NotFoundException("User not found", null);
+    }
 
     return new ListEnrollResponse(
         user.getEvents()

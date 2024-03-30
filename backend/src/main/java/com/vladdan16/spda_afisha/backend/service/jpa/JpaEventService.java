@@ -1,6 +1,7 @@
 package com.vladdan16.spda_afisha.backend.service.jpa;
 
 import com.vladdan16.spda_afisha.backend.domain.exceptions.ForbiddenException;
+import com.vladdan16.spda_afisha.backend.domain.exceptions.NotFoundException;
 import com.vladdan16.spda_afisha.backend.domain.models.EventType;
 import com.vladdan16.spda_afisha.backend.domain.models.Event;
 import com.vladdan16.spda_afisha.backend.domain.repositories.EventRepository;
@@ -59,7 +60,11 @@ public class JpaEventService implements EventService {
 
   @Override
   public void deleteEvent(String userId, Long id) {
-    var event = eventRepository.getReferenceById(id);
+    var event = eventRepository.getEventById(id);
+    if (event == null) {
+      throw new NotFoundException("Event not found", null);
+    }
+
     if (!event.getAuthorId().equals(userId)) {
       throw new ForbiddenException("Unable to delete event not created by current user", null);
       }
@@ -68,7 +73,11 @@ public class JpaEventService implements EventService {
 
   @Override
   public EventResponse getEvent(Long id) {
-    var event = eventRepository.getReferenceById(id);
+    var event = eventRepository.getEventById(id);
+    if (event == null) {
+      throw new NotFoundException("Event not found", null);
+    }
+
     return new EventResponse(
         event.getId(),
         event.getName(),
@@ -89,7 +98,11 @@ public class JpaEventService implements EventService {
       Long numberSeats,
       EventType type
   ) {
-    var event = eventRepository.getReferenceById(id);
+    var event = eventRepository.getEventById(id);
+    if (event == null) {
+      throw new NotFoundException("Event not found", null);
+    }
+
     if (!event.getAuthorId().equals(userId)) {
       throw new ForbiddenException("Unable to edit event not created by current user", null);
     }
