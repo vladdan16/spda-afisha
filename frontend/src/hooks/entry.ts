@@ -1,10 +1,10 @@
 import { useContext, useState } from "react";
-import { ErrorModalContext } from "../context/ErrorModalContext";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { auth } from "../firebase";
+import { ErrorModalContext } from "../components/ErrorModal";
 
 export function useEntry() {
   const [loading, setLoading] = useState(false);
