@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { ModalContext } from "../context/ModalContext";
+import { ErrorModalContext } from "../context/ErrorModalContext";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -12,7 +12,7 @@ export function useEntry() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const modal = useContext(ModalContext);
+  const errorModal = useContext(ErrorModalContext);
 
   const toggleRegistration = () => {
     setIsRegistered((was) => !was);
@@ -28,7 +28,7 @@ export function useEntry() {
       console.log("Entered successfully!");
     } catch (error: any) {
       console.error("Authentication error: ", error);
-      modal.open(error.message);
+      errorModal.open(error.message);
     }
     setLoading(false);
   };

@@ -1,14 +1,14 @@
 import { useContext } from "react";
 import { Modal } from "./Modal";
-import { ModalContext } from "../context/ModalContext";
+import { ErrorModalContext } from "../context/ErrorModalContext";
 
 export function ErrorModal() {
-  const { msg, close } = useContext(ModalContext);
+  const { msg, close } = useContext(ErrorModalContext);
   const show = msg !== undefined;
   return (
     <>
       {show && (
-        <Modal>
+        <Modal onClose={close}>
           <div className="bg-white p-4 rounded-lg shadow-lg flex flex-col items-center">
             <p className="text-red-500 text-lg font-bold">Ошибка</p>
             <p className="mb-4">{msg}</p>

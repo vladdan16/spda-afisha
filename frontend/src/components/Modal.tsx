@@ -1,14 +1,15 @@
-import React, { useContext } from "react";
-import { ModalContext } from "../context/ModalContext";
-
-export function Modal({ children }: { children: React.ReactNode }) {
-  const { close } = useContext(ModalContext);
-
+export function Modal({
+  children,
+  onClose,
+}: {
+  children: React.ReactNode;
+  onClose: () => void;
+}) {
   return (
     <>
       <div
         className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
-        onClick={close}
+        onClick={onClose}
       >
         {children}
       </div>
