@@ -24,7 +24,7 @@ export default function EntryPage() {
       <div className="flex-grow">
         <div className="flex justify-center items-center h-full">
           {loading ? (
-            <div className="loader"></div>
+            <div className="loader" />
           ) : (
             <div className="w-[724px] bg-gradient-to-b from-blue-800 to-indigo-400 rounded-[30px] p-8 flex flex-col items-center">
               <div className="text-white text-[58px] font-semibold font-Montserrat mb-8">
