@@ -5,7 +5,6 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { auth } from "../firebase";
-import { ErrorModal } from "../components/ErrorModal";
 import { ModalContext } from "../context/ModalContext";
 
 export default function EntryPage() {
@@ -35,7 +34,6 @@ export default function EntryPage() {
   return (
     <div className="flex flex-col h-screen">
       <Navigation loggedIn={false} />
-      <ErrorModal />
       <div className="flex-grow">
         <div className="flex justify-center items-center h-full">
           <div className="flex justify-center items-center h-full">
