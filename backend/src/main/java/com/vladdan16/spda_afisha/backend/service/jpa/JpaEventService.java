@@ -1,5 +1,6 @@
 package com.vladdan16.spda_afisha.backend.service.jpa;
 
+import com.vladdan16.spda_afisha.backend.domain.exceptions.ForbiddenException;
 import com.vladdan16.spda_afisha.backend.domain.models.EventType;
 import com.vladdan16.spda_afisha.backend.domain.models.Event;
 import com.vladdan16.spda_afisha.backend.domain.repositories.EventRepository;
@@ -21,7 +22,8 @@ public class JpaEventService implements EventService {
   private final EventRepository eventRepository;
 
   @Override
-  public void createEvent(
+  public Long createEvent(
+      String userId,
       String name,
       String description,
       Timestamp startAt,
@@ -29,6 +31,7 @@ public class JpaEventService implements EventService {
       EventType type
   ) {
     var event = Event.builder()
+        .authorId(userId)
         .name(name)
         .description(description)
         .startAt(startAt)
@@ -36,6 +39,7 @@ public class JpaEventService implements EventService {
         .type(type)
         .build();
     eventRepository.save(event);
+    return event.getId();
   }
 
   @Override
@@ -54,7 +58,11 @@ public class JpaEventService implements EventService {
   }
 
   @Override
-  public void deleteEvent(Long id) {
+  public void deleteEvent(String userId, Long id) {
+    var event = eventRepository.getReferenceById(id);
+    if (!event.getAuthorId().equals(userId)) {
+      throw new ForbiddenException("Unable to delete event not created by current user", null);
+      }
     eventRepository.deleteById(id);
   }
 
@@ -73,6 +81,7 @@ public class JpaEventService implements EventService {
 
   @Override
   public void updateEvent(
+      String userId,
       @NotNull Long id,
       String name,
       String description,
@@ -81,6 +90,9 @@ public class JpaEventService implements EventService {
       EventType type
   ) {
     var event = eventRepository.getReferenceById(id);
+    if (!event.getAuthorId().equals(userId)) {
+      throw new ForbiddenException("Unable to edit event not created by current user", null);
+    }
 
     if (name != null) {
       event.setName(name);
@@ -97,5 +109,20 @@ public class JpaEventService implements EventService {
     if (type != null) {
       event.setType(type);
     }
+  }
+
+  @Override
+  public ListEventResponse listMyEvents(String userId) {
+    return new ListEventResponse(eventRepository
+        .findByAuthorId(userId)
+        .stream()
+        .map((event) -> new EventResponse(
+            event.getId(),
+            event.getName(),
+            event.getDescription(),
+            event.getStartAt(),
+            event.getNumberSeats(),
+            event.getType())
+        ).toList());
   }
 }

@@ -1,6 +1,7 @@
 package com.vladdan16.spda_afisha.backend.controller;
 
-import com.vladdan16.spda_afisha.backend.domain.exceptions.EventNotFoundException;
+import com.vladdan16.spda_afisha.backend.domain.exceptions.ForbiddenException;
+import com.vladdan16.spda_afisha.backend.domain.exceptions.NotFoundException;
 import com.vladdan16.spda_afisha.backend.domain.exceptions.NotAuthorizedException;
 import com.vladdan16.spda_afisha.backend.dto.responses.ApiErrorResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -15,12 +16,10 @@ import java.util.List;
 @Slf4j
 @RestControllerAdvice
 public class ExceptionApiHandler {
-  @ExceptionHandler(EventNotFoundException.class)
-  public ResponseEntity<ApiErrorResponse> handleEventNotFoundException(final EventNotFoundException e) {
-    List<String> errors = List.of(Arrays.toString(e.getStackTrace()));
-    log.error(errors.toString());
+  @ExceptionHandler(NotFoundException.class)
+  public ResponseEntity<ApiErrorResponse> handleNotFoundException(final NotFoundException e) {
     ApiErrorResponse response = new ApiErrorResponse(
-        "Event not found",
+        "Not found",
         "404",
         e.getClass().getSimpleName(),
         e.getMessage());
@@ -29,14 +28,22 @@ public class ExceptionApiHandler {
 
   @ExceptionHandler(NotAuthorizedException.class)
   public ResponseEntity<ApiErrorResponse> handleNotAuthorizedException(final NotAuthorizedException e) {
-    List<String> errors = List.of(Arrays.toString(e.getStackTrace()));
-    log.error(errors.toString());
     ApiErrorResponse response = new ApiErrorResponse(
         "Not authorized",
         "401",
         e.getClass().getSimpleName(),
         e.getMessage());
     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+  }
+
+  @ExceptionHandler(ForbiddenException.class)
+  public ResponseEntity<ApiErrorResponse> handleForbiddenException(final ForbiddenException e) {
+    ApiErrorResponse response = new ApiErrorResponse(
+        "Forbidden",
+        "403",
+        e.getClass().getSimpleName(),
+        e.getMessage());
+    return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
   }
 
   // TODO: handle other possible exceptions
