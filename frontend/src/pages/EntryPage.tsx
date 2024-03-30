@@ -1,34 +1,21 @@
-import { useContext, useState } from "react";
 import { Navigation } from "../components/Navigation";
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-} from "firebase/auth";
-import { auth } from "../firebase";
-import { ModalContext } from "../context/ModalContext";
+import { useEntry } from "../hooks/entry";
 
 export default function EntryPage() {
-  const [isRegistered, setIsRegistered] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const modal = useContext(ModalContext);
+  const {
+    loading,
+    isRegistered,
+    email,
+    password,
+    setEmail,
+    setPassword,
+    toggleRegistration,
+    enter,
+  } = useEntry();
 
-  const toggleRegistration = () => {
-    setIsRegistered((was) => !was);
-  };
-
-  const handleAuth = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleAuth = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    try {
-      const entry = isRegistered
-        ? signInWithEmailAndPassword
-        : createUserWithEmailAndPassword;
-      await entry(auth, email, password);
-      console.log("Entered successfully!");
-    } catch (error: any) {
-      console.error("Authentication error: ", error);
-      modal.open(error.message);
-    }
+    enter();
   };
 
   return (
@@ -36,7 +23,9 @@ export default function EntryPage() {
       <Navigation loggedIn={false} />
       <div className="flex-grow">
         <div className="flex justify-center items-center h-full">
-          <div className="flex justify-center items-center h-full">
+          {loading ? (
+            <div className="loader"></div>
+          ) : (
             <div className="w-[724px] bg-gradient-to-b from-blue-800 to-indigo-400 rounded-[30px] p-8 flex flex-col items-center">
               <div className="text-white text-[58px] font-semibold font-Montserrat mb-8">
                 {isRegistered ? "Вход" : "Регистрация"}
@@ -83,7 +72,7 @@ export default function EntryPage() {
                 {isRegistered ? "зарегистрироваться" : "войти"}
               </button>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </div>
