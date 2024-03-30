@@ -7,7 +7,8 @@ import com.vladdan16.spda_afisha.backend.dto.responses.events.ListEventResponse;
 import java.sql.Timestamp;
 
 public interface EventService {
-  void createEvent(
+  Long createEvent(
+      String userId,
       String name,
       String description,
       Timestamp startAt,
@@ -17,11 +18,12 @@ public interface EventService {
 
   ListEventResponse listEvents();
 
-  void deleteEvent(Long id);
+  void deleteEvent(String userId, Long id);
 
   EventResponse getEvent(Long id);
 
   void updateEvent(
+      String userId,
       Long id,
       String name,
       String description,
@@ -29,4 +31,6 @@ public interface EventService {
       Long numberSeats,
       EventType type
   );
+
+  ListEventResponse listMyEvents(String userId);
 }

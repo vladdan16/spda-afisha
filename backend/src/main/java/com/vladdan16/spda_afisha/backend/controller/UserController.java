@@ -16,6 +16,12 @@ public class UserController {
   private final UserService userService;
   private final FirebaseService firebaseService;
 
+  /**
+   * Creates User
+   * @param authHeader Authorization token
+   * @param request User's data
+   * @return Void
+   */
   @PostMapping
   public ResponseEntity<Void> createUser(
       @RequestHeader("Authorization") final String authHeader,
@@ -31,7 +37,11 @@ public class UserController {
     return ResponseEntity.ok().build();
   }
 
-  // TODO: надо ли нам ручка чтобы получить пользователя по почте (например, для админа)?
+  /**
+   * Get user's data
+   * @param authHeader Authorization token
+   * @return Information about user
+   */
   @GetMapping
   public ResponseEntity<UserResponse> getUser(
       @RequestHeader("Authorization") final String authHeader
@@ -41,7 +51,11 @@ public class UserController {
     return ResponseEntity.ok(response);
   }
 
-  // TODO: админ может удалить пользователя? По ходу надо отдельно делать админские ручки
+  /**
+   * Deletes current user
+   * @param authHeader Authorization token
+   * @return Void
+   */
   @DeleteMapping
   public ResponseEntity<Void> deleteUser(
       @RequestHeader("Authorization") final String authHeader
@@ -51,7 +65,12 @@ public class UserController {
     return ResponseEntity.ok().build();
   }
 
-  // TODO: добавить возможность админам обновлять пользователя в т.ч. назначить роль (отдельная ручка)?
+  /**
+   * Updated user info
+   * @param request User's data
+   * @param authHeader Authorization token
+   * @return Void
+   */
   @PatchMapping
   public ResponseEntity<Void> updateUser(
       @RequestBody final UpdateUserRequest request,
@@ -66,6 +85,4 @@ public class UserController {
     );
     return ResponseEntity.ok().build();
   }
-
-  // TODO: сделать ручку для получения ивентов по юзеру
 }

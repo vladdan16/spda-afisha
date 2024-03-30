@@ -5,59 +5,92 @@ import com.vladdan16.spda_afisha.backend.dto.requests.events.UpdateEventRequest;
 import com.vladdan16.spda_afisha.backend.dto.responses.events.EventResponse;
 import com.vladdan16.spda_afisha.backend.dto.responses.events.ListEventResponse;
 import com.vladdan16.spda_afisha.backend.service.EventService;
+import com.vladdan16.spda_afisha.backend.service.FirebaseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/event")
 @RequiredArgsConstructor
 public class EventController {
-
   private final EventService eventService;
+  private final FirebaseService firebaseService;
 
-  // Admin's routes
+  /**
+   * Creates Event
+   * @param authHeader Authorization token
+   * @param request Request with information about Event
+   * @return Void
+   */
   @PostMapping
-  public ResponseEntity<Void> createEvent(@RequestBody final CreateEventRequest request) {
-    eventService.createEvent(
+  public ResponseEntity<Long> createEvent(
+      @RequestHeader("Authorization") final String authHeader,
+      @RequestBody final CreateEventRequest request
+  ) {
+    final var token = firebaseService.decodeToken(authHeader);
+    final var id = eventService.createEvent(
+        token.getUid(),
         request.name(),
         request.description(),
         request.startAt(),
         request.numberSeats(),
         request.type()
     );
-    return ResponseEntity.ok().build();
+    return ResponseEntity.ok(id);
   }
 
-  // Non-admin's routes
+  /**
+   * Obtains list of events available to enroll
+   * @return List of events
+   */
   @GetMapping("/list")
   public ResponseEntity<ListEventResponse> listEvents() {
     var response = eventService.listEvents();
     return ResponseEntity.ok(response);
   }
 
+  /**
+   * Deletes event
+   * @param authHeader Authorization token
+   * @param id ID of Event
+   * @return Void
+   */
   @DeleteMapping
-  public ResponseEntity<Void> deleteEvent(@RequestParam final Long id) {
-    eventService.deleteEvent(id);
+  public ResponseEntity<Void> deleteEvent(
+      @RequestHeader("Authorization") final String authHeader,
+      @RequestParam final Long id
+  ) {
+    final var token = firebaseService.decodeToken(authHeader);
+    eventService.deleteEvent(token.getUid(), id);
     return ResponseEntity.ok().build();
   }
 
+  /**
+   * Obtains information about specific Event
+   * @param id ID of event
+   * @return Event
+   */
   @GetMapping
   public ResponseEntity<EventResponse> getEvent(@RequestParam final Long id) {
     var response = eventService.getEvent(id);
     return ResponseEntity.ok(response);
   }
 
+  /**
+   * Updates information about event
+   * @param authHeader Authorization token
+   * @param request Description of the Event
+   * @return Void
+   */
   @PatchMapping
-  public ResponseEntity<Void> updateEvent(@RequestBody final UpdateEventRequest request) {
+  public ResponseEntity<Void> updateEvent(
+      @RequestHeader("Authorization") final String authHeader,
+      @RequestBody final UpdateEventRequest request
+  ) {
+    final var token = firebaseService.decodeToken(authHeader);
     eventService.updateEvent(
+        token.getUid(),
         request.id(),
         request.name(),
         request.description(),
@@ -66,5 +99,14 @@ public class EventController {
         request.type()
     );
     return ResponseEntity.ok().build();
+  }
+
+  @GetMapping("/my_events")
+  public ResponseEntity<ListEventResponse> listMyEvents(
+      @RequestHeader("Authorization") final String authHeader
+  ) {
+    final var token = firebaseService.decodeToken(authHeader);
+    final var response = eventService.listMyEvents(token.getUid());
+    return ResponseEntity.ok(response);
   }
 }
