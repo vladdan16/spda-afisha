@@ -5,6 +5,7 @@ import {
 } from "firebase/auth";
 import { auth } from "../firebase";
 import { ErrorModalContext } from "../components/ErrorModal";
+import { setToken } from "../services/TokenStore";
 
 export function useEntry() {
   const [loading, setLoading] = useState(false);
@@ -24,7 +25,10 @@ export function useEntry() {
       const entry = isRegistered
         ? signInWithEmailAndPassword
         : createUserWithEmailAndPassword;
-      await entry(auth, email, password);
+      const res = await entry(auth, email, password);
+
+      setToken(await res.user.getIdToken());
+
       console.log("Entered successfully!");
     } catch (error: any) {
       console.error("Authentication error: ", error);
