@@ -1,6 +1,8 @@
 import { Navigation } from "../components/Navigation";
 
-export default function FeedPage() {
+export const path = "/feed";
+
+export function Page() {
   return (
     <>
       <Navigation loggedIn={true} />

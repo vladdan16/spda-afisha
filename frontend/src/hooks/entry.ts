@@ -6,8 +6,11 @@ import {
 import { auth } from "../firebase";
 import { ErrorModalContext } from "../components/ErrorModal";
 import { setToken } from "../services/TokenStore";
+import { useNavigate } from "react-router-dom";
+import * as Feed from "../pages/FeedPage";
 
 export function useEntry() {
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [isRegistered, setIsRegistered] = useState(false);
   const [email, setEmail] = useState("");
@@ -28,8 +31,9 @@ export function useEntry() {
       const res = await entry(auth, email, password);
 
       setToken(await res.user.getIdToken());
-
       console.log("Entered successfully!");
+
+      navigate(Feed.path);
     } catch (error: any) {
       console.error("Authentication error: ", error);
       errorModal.open(error.message);

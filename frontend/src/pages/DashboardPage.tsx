@@ -1,6 +1,8 @@
 import { Navigation } from "../components/Navigation";
 
-export default function DashboardPage() {
+export const path = "/dashboard";
+
+export function Page() {
   return (
     <>
       <Navigation loggedIn={true} />

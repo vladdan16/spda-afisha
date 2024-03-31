@@ -1,7 +1,9 @@
 import { Navigation } from "../components/Navigation";
 import { useEntry } from "../hooks/entry";
 
-export default function EntryPage() {
+export const path = "/entry";
+
+export function Page() {
   const {
     loading,
     isRegistered,
