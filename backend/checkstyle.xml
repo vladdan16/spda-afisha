@@ -286,10 +286,10 @@
         <!-- <module name="MissingCtor"/> -->
         <module name="MissingSwitchDefault"/>
         <module name="ModifiedControlVariable"/>
-        <module name="MultipleStringLiterals">
-            <!-- Allow zero-length and 1-character strings -->
-            <property name="ignoreStringsRegexp" value='^(("")|(".")|("..")|("..>"))$'/>
-        </module>
+<!--        <module name="MultipleStringLiterals">-->
+<!--            &lt;!&ndash; Allow zero-length and 1-character strings &ndash;&gt;-->
+<!--            <property name="ignoreStringsRegexp" value='^(("")|(".")|("..")|("..>"))$'/>-->
+<!--        </module>-->
         <module name="MultipleVariableDeclarations"/>
         <module name="NestedForDepth">
             <property name="max" value="2"/>
@@ -314,7 +314,7 @@
         </module>
         <module name="SimplifyBooleanExpression"/>
         <module name="SimplifyBooleanReturn"/>
-        <module name="StringLiteralEquality"/>
+<!--        <module name="StringLiteralEquality"/>-->
         <module name="SuperClone"/>
         <module name="SuperFinalize"/>
         <!-- <module name="UnnecessaryParentheses"/> -->

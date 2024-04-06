@@ -1,5 +1,6 @@
 package com.vladdan16.spda_afisha.backend.service.jpa;
 
+import com.vladdan16.spda_afisha.backend.domain.exceptions.NotFoundException;
 import com.vladdan16.spda_afisha.backend.domain.models.User;
 import com.vladdan16.spda_afisha.backend.domain.models.UserRole;
 import com.vladdan16.spda_afisha.backend.domain.repositories.UserRepository;
@@ -18,6 +19,9 @@ public class JpaUserService implements UserService {
   @Override
   public UserResponse getUserByUid(String uid) {
     final var user = userRepository.getUserById(uid);
+    if (user == null) {
+      throw new NotFoundException("User not found", null);
+    }
     return new UserResponse(
         user.getId(),
         user.getEmail(),
@@ -28,6 +32,10 @@ public class JpaUserService implements UserService {
 
   @Override
   public void deleteUserByUid(String uid) {
+    final var user = userRepository.getUserById(uid);
+    if (user == null) {
+      throw new NotFoundException("User not found", null);
+    }
     userRepository.deleteById(uid);
   }
 
@@ -56,6 +64,10 @@ public class JpaUserService implements UserService {
       String surname
   ) {
     final var user = userRepository.getUserById(uid);
+    if (user == null) {
+      throw new NotFoundException("User not found", null);
+    }
+
     if (email != null) {
       user.setEmail(email);
     }

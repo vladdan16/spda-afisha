@@ -1,6 +1,7 @@
 package com.vladdan16.spda_afisha.backend.controller;
 
 import com.vladdan16.spda_afisha.backend.domain.exceptions.ForbiddenException;
+import com.vladdan16.spda_afisha.backend.domain.exceptions.NotAcceptableException;
 import com.vladdan16.spda_afisha.backend.domain.exceptions.NotFoundException;
 import com.vladdan16.spda_afisha.backend.domain.exceptions.NotAuthorizedException;
 import com.vladdan16.spda_afisha.backend.dto.responses.ApiErrorResponse;
@@ -46,7 +47,15 @@ public class ExceptionApiHandler {
     return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
   }
 
-  // TODO: handle other possible exceptions
+  @ExceptionHandler(NotAcceptableException.class)
+  public ResponseEntity<ApiErrorResponse> handleNotAcceptableException(final NotAcceptableException e) {
+    ApiErrorResponse response = new ApiErrorResponse(
+        "Not acceptable",
+        "406",
+        e.getClass().getSimpleName(),
+        e.getMessage());
+    return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(response);
+  }
 
   @ExceptionHandler(Exception.class)
   public ResponseEntity<ApiErrorResponse> handleException(final Exception e) {
