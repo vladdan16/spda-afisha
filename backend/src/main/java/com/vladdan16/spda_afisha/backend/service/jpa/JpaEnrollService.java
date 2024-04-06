@@ -1,5 +1,6 @@
 package com.vladdan16.spda_afisha.backend.service.jpa;
 
+import com.vladdan16.spda_afisha.backend.domain.exceptions.NotAcceptableException;
 import com.vladdan16.spda_afisha.backend.domain.exceptions.NotFoundException;
 import com.vladdan16.spda_afisha.backend.domain.repositories.EventRepository;
 import com.vladdan16.spda_afisha.backend.domain.repositories.UserRepository;
@@ -28,7 +29,9 @@ public class JpaEnrollService implements EnrollService {
       throw new NotFoundException("User not found", null);
     }
 
-    // TODO: add check that user not in event
+    if (user.getEvents().contains(event) || event.getUsers().contains(user)) {
+      throw new NotAcceptableException("Enroll already exists", null);
+    }
     user.getEvents().add(event);
     event.getUsers().add(user);
   }
@@ -43,7 +46,9 @@ public class JpaEnrollService implements EnrollService {
     if (user == null) {
       throw new NotFoundException("User not found", null);
     }
-    //TODO: add check that user in event
+    if (!user.getEvents().contains(event) || !event.getUsers().contains(user)) {
+      throw new NotAcceptableException("Enroll does not exist", null);
+    }
     user.getEvents().remove(event);
     event.getUsers().remove(user);
   }
