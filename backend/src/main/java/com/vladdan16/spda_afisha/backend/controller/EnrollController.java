@@ -17,8 +17,9 @@ public class EnrollController {
 
   /**
    * Enrolls user to specified event
+   *
    * @param authHeader Authorization token
-   * @param request Request with Long event ID
+   * @param request    Request with Long event ID
    * @return Void
    */
   @PostMapping
@@ -36,8 +37,9 @@ public class EnrollController {
 
   /**
    * Cancels the user's enroll
+   *
    * @param authHeader Authorization token
-   * @param request Request with Long event ID
+   * @param request    Request with Long event ID
    * @return Void
    */
   @DeleteMapping
@@ -55,6 +57,7 @@ public class EnrollController {
 
   /**
    * Lists all enrolls of user
+   *
    * @param authHeader Authorization token
    * @return List of Events where user is enrolled
    */

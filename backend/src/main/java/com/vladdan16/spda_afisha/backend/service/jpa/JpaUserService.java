@@ -20,7 +20,7 @@ public class JpaUserService implements UserService {
   public UserResponse getUserByUid(String uid) {
     final var user = userRepository.getUserById(uid);
     if (user == null) {
-      throw new NotFoundException("User not found", null);
+      throw new NotFoundException("User not found");
     }
     return new UserResponse(
         user.getId(),
@@ -34,7 +34,7 @@ public class JpaUserService implements UserService {
   public void deleteUserByUid(String uid) {
     final var user = userRepository.getUserById(uid);
     if (user == null) {
-      throw new NotFoundException("User not found", null);
+      throw new NotFoundException("User not found");
     }
     userRepository.deleteById(uid);
   }
@@ -65,7 +65,7 @@ public class JpaUserService implements UserService {
   ) {
     final var user = userRepository.getUserById(uid);
     if (user == null) {
-      throw new NotFoundException("User not found", null);
+      throw new NotFoundException("User not found");
     }
 
     if (email != null) {

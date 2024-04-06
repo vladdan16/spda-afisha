@@ -34,4 +34,7 @@ public class Event {
   @JsonIgnore
   @ManyToMany(mappedBy = "events")
   private List<User> users;
+
+  @ElementCollection
+  private List<String> images;
 }

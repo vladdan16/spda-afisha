@@ -22,15 +22,15 @@ public class JpaEnrollService implements EnrollService {
   public void createEnroll(String userId, Long eventId) {
     var event = eventRepository.getEventById(eventId);
     if (event == null) {
-      throw new NotFoundException("Event not found", null);
+      throw new NotFoundException("Event not found");
     }
     var user = userRepository.getUserById(userId);
     if (user == null) {
-      throw new NotFoundException("User not found", null);
+      throw new NotFoundException("User not found");
     }
 
     if (user.getEvents().contains(event) || event.getUsers().contains(user)) {
-      throw new NotAcceptableException("Enroll already exists", null);
+      throw new NotAcceptableException("Enroll already exists");
     }
     user.getEvents().add(event);
     event.getUsers().add(user);
@@ -40,14 +40,14 @@ public class JpaEnrollService implements EnrollService {
   public void deleteEnroll(String userId, Long eventId) {
     var event = eventRepository.getEventById(eventId);
     if (event == null) {
-      throw new NotFoundException("Event not found", null);
+      throw new NotFoundException("Event not found");
     }
     var user = userRepository.getUserById(userId);
     if (user == null) {
-      throw new NotFoundException("User not found", null);
+      throw new NotFoundException("User not found");
     }
     if (!user.getEvents().contains(event) || !event.getUsers().contains(user)) {
-      throw new NotAcceptableException("Enroll does not exist", null);
+      throw new NotAcceptableException("Enroll does not exist");
     }
     user.getEvents().remove(event);
     event.getUsers().remove(user);
@@ -57,7 +57,7 @@ public class JpaEnrollService implements EnrollService {
   public ListEnrollResponse getEnrollsByUser(String userId) {
     var user = userRepository.getUserById(userId);
     if (user == null) {
-      throw new NotFoundException("User not found", null);
+      throw new NotFoundException("User not found");
     }
 
     return new ListEnrollResponse(
@@ -69,7 +69,8 @@ public class JpaEnrollService implements EnrollService {
                 event.getDescription(),
                 event.getStartAt(),
                 event.getNumberSeats(),
-                event.getType()
+                event.getType(),
+                event.getImages()
             ))
             .toList());
   }

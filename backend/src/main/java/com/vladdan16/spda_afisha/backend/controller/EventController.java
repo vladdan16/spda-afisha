@@ -9,6 +9,7 @@ import com.vladdan16.spda_afisha.backend.service.FirebaseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/event")
@@ -19,8 +20,9 @@ public class EventController {
 
   /**
    * Creates Event
+   *
    * @param authHeader Authorization token
-   * @param request Request with information about Event
+   * @param request    Request with information about Event
    * @return Void
    */
   @PostMapping
@@ -42,6 +44,7 @@ public class EventController {
 
   /**
    * Obtains list of events available to enroll
+   *
    * @return List of events
    */
   @GetMapping("/list")
@@ -52,35 +55,38 @@ public class EventController {
 
   /**
    * Deletes event
+   *
    * @param authHeader Authorization token
-   * @param id ID of Event
+   * @param eventId    ID of Event
    * @return Void
    */
-  @DeleteMapping
+  @DeleteMapping("/{eventId}")
   public ResponseEntity<Void> deleteEvent(
       @RequestHeader("Authorization") final String authHeader,
-      @RequestParam final Long id
+      @PathVariable final Long eventId
   ) {
     final var token = firebaseService.decodeToken(authHeader);
-    eventService.deleteEvent(token.getUid(), id);
+    eventService.deleteEvent(token.getUid(), eventId);
     return ResponseEntity.ok().build();
   }
 
   /**
    * Obtains information about specific Event
-   * @param id ID of event
+   *
+   * @param eventId ID of event
    * @return Event
    */
-  @GetMapping
-  public ResponseEntity<EventResponse> getEvent(@RequestParam final Long id) {
-    var response = eventService.getEvent(id);
+  @GetMapping("/{eventId}")
+  public ResponseEntity<EventResponse> getEvent(@PathVariable final Long eventId) {
+    var response = eventService.getEvent(eventId);
     return ResponseEntity.ok(response);
   }
 
   /**
    * Updates information about event
+   *
    * @param authHeader Authorization token
-   * @param request Description of the Event
+   * @param request    Description of the Event
    * @return Void
    */
   @PatchMapping
@@ -101,6 +107,33 @@ public class EventController {
     return ResponseEntity.ok().build();
   }
 
+  /**
+   * Saves an image for event
+   *
+   * @param authHeader Authentication token
+   * @param eventId    ID of event where to upload an image
+   * @param file       Image itself as file
+   * @return Void
+   */
+  @PostMapping("/{eventId}/image")
+  public ResponseEntity<Void> uploadImage(
+      @RequestHeader("Authorization") final String authHeader,
+      @PathVariable Long eventId,
+      @RequestParam("file") MultipartFile file
+  ) {
+    final var token = firebaseService.decodeToken(authHeader);
+
+    eventService.saveImage(eventId, token.getUid(), file);
+
+    return ResponseEntity.ok().build();
+  }
+
+  /**
+   * List of all events that authorized user created
+   *
+   * @param authHeader Authentication token
+   * @return List of EventResponses
+   */
   @GetMapping("/my_events")
   public ResponseEntity<ListEventResponse> listMyEvents(
       @RequestHeader("Authorization") final String authHeader

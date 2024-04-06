@@ -18,8 +18,9 @@ public class UserController {
 
   /**
    * Creates User
+   *
    * @param authHeader Authorization token
-   * @param request User's data
+   * @param request    User's data
    * @return Void
    */
   @PostMapping
@@ -39,6 +40,7 @@ public class UserController {
 
   /**
    * Get user's data
+   *
    * @param authHeader Authorization token
    * @return Information about user
    */
@@ -53,6 +55,7 @@ public class UserController {
 
   /**
    * Deletes current user
+   *
    * @param authHeader Authorization token
    * @return Void
    */
@@ -67,7 +70,8 @@ public class UserController {
 
   /**
    * Updated user info
-   * @param request User's data
+   *
+   * @param request    User's data
    * @param authHeader Authorization token
    * @return Void
    */
