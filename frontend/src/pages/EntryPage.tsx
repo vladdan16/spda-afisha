@@ -2,6 +2,7 @@ import { Navigation } from "../components/Navigation";
 import { useEntry } from "../hooks/entry";
 import { ensureUserNotLoggedIn } from "../shared/loginState";
 import * as Feed from "../pages/FeedPage";
+import { Loading } from "../components/Loading";
 
 export const path = "/entry";
 
@@ -30,7 +31,7 @@ export function Page() {
         <div className="flex-grow">
           <div className="flex justify-center items-center h-full">
             {loading ? (
-              <div className="loader" />
+              <Loading />
             ) : (
               <div className="w-[724px] bg-gradient-to-b from-blue-800 to-indigo-400 rounded-[30px] p-8 flex flex-col items-center">
                 <div className="text-white text-[58px] font-semibold font-Montserrat mb-8">

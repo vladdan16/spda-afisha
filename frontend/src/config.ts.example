@@ -1,0 +1,10 @@
+export const firebase = {
+  apiKey: "xxx-xxx",
+  authDomain: "xxx.firebaseapp.com",
+  projectId: "xxx",
+  storageBucket: "xxx.appspot.com",
+  messagingSenderId: "xxx",
+  appId: "1:xxx:web:xxx",
+};
+
+export const afishaApi = "http://xxx.xxx.xxx.xxx";

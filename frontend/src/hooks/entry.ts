@@ -4,10 +4,10 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { auth } from "../firebase";
-import { ErrorModalContext } from "../components/ErrorModal";
 import { setToken } from "../services/TokenStore";
 import { useNavigate } from "react-router-dom";
 import * as Feed from "../pages/FeedPage";
+import { ErrorModalContext } from "../contexts/ErrorModal";
 
 export function useEntry() {
   const navigate = useNavigate();
@@ -16,7 +16,7 @@ export function useEntry() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const errorModal = useContext(ErrorModalContext);
+  const errorModal = useContext(ErrorModalContext)!;
 
   const toggleRegistration = () => {
     setIsRegistered((was) => !was);
