@@ -10,6 +10,7 @@ FROM openjdk:21-oracle
 WORKDIR /backend
 COPY --from=build /backend/build/libs/*.jar backend.jar
 RUN useradd user && \
-    chown -R user backend.jar
+    chown -R user:user /backend && \
+    chmod -R 757 /backend
 USER user
 CMD java -jar backend.jar

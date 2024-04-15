@@ -12,12 +12,16 @@ import com.vladdan16.spda_afisha.backend.service.ImageService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.Timestamp;
+import java.util.HashSet;
+import java.util.List;
 
 
+@Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -72,6 +76,7 @@ public class JpaEventService implements EventService {
     if (!event.getAuthorId().equals(userId)) {
       throw new ForbiddenException("Unable to delete event not created by current user");
     }
+    imageService.deleteAllImages(event.getImages());
     eventRepository.deleteById(id);
   }
 
@@ -144,6 +149,25 @@ public class JpaEventService implements EventService {
     final var imageName = imageService.storeImage(file);
 
     event.getImages().add(imageName);
+  }
+
+  @Override
+  public void deleteImages(Long eventId, String userId, List<String> images) {
+    var event = eventRepository.getEventById(eventId);
+
+    if (event == null) {
+      throw new NotFoundException("Event not found");
+    }
+
+    if (!event.getAuthorId().equals(userId)) {
+      throw new ForbiddenException("Unable to edit event not created by current user");
+    }
+
+    final var set = new HashSet<>(images);
+
+    imageService.deleteAllImages(set.stream().toList());
+
+    event.getImages().removeAll(set);
   }
 
   @Override

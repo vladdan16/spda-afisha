@@ -1,6 +1,7 @@
 package com.vladdan16.spda_afisha.backend.controller;
 
 import com.vladdan16.spda_afisha.backend.dto.requests.events.CreateEventRequest;
+import com.vladdan16.spda_afisha.backend.dto.requests.events.DeleteImagesRequest;
 import com.vladdan16.spda_afisha.backend.dto.requests.events.UpdateEventRequest;
 import com.vladdan16.spda_afisha.backend.dto.responses.events.EventResponse;
 import com.vladdan16.spda_afisha.backend.dto.responses.events.ListEventResponse;
@@ -124,6 +125,27 @@ public class EventController {
     final var token = firebaseService.decodeToken(authHeader);
 
     eventService.saveImage(eventId, token.getUid(), file);
+
+    return ResponseEntity.ok().build();
+  }
+
+  /**
+   * Deletes images from specified event
+   *
+   * @param authHeader Authentication token
+   * @param eventId    ID of event
+   * @param request    Request containing list of images
+   * @return Void
+   */
+  @PostMapping("/{eventId}/delete_images")
+  public ResponseEntity<Void> deleteImages(
+      @RequestHeader("Authorization") final String authHeader,
+      @PathVariable Long eventId,
+      @RequestBody DeleteImagesRequest request
+  ) {
+    final var token = firebaseService.decodeToken(authHeader);
+
+    eventService.deleteImages(eventId, token.getUid(), request.images());
 
     return ResponseEntity.ok().build();
   }
