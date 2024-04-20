@@ -5,6 +5,7 @@ import com.vladdan16.spda_afisha.backend.dto.requests.events.DeleteImagesRequest
 import com.vladdan16.spda_afisha.backend.dto.requests.events.UpdateEventRequest;
 import com.vladdan16.spda_afisha.backend.dto.responses.events.EventResponse;
 import com.vladdan16.spda_afisha.backend.dto.responses.events.ListEventResponse;
+import com.vladdan16.spda_afisha.backend.dto.responses.events.ListOwnerEventResponse;
 import com.vladdan16.spda_afisha.backend.service.EventService;
 import com.vladdan16.spda_afisha.backend.service.FirebaseService;
 import lombok.RequiredArgsConstructor;
@@ -117,16 +118,16 @@ public class EventController {
    * @return Void
    */
   @PostMapping("/{eventId}/image")
-  public ResponseEntity<Void> uploadImage(
+  public ResponseEntity<String> uploadImage(
       @RequestHeader("Authorization") final String authHeader,
       @PathVariable Long eventId,
       @RequestParam("file") MultipartFile file
   ) {
     final var token = firebaseService.decodeToken(authHeader);
 
-    eventService.saveImage(eventId, token.getUid(), file);
+    var imageName = eventService.saveImage(eventId, token.getUid(), file);
 
-    return ResponseEntity.ok().build();
+    return ResponseEntity.ok(imageName);
   }
 
   /**
@@ -157,7 +158,7 @@ public class EventController {
    * @return List of EventResponses
    */
   @GetMapping("/my_events")
-  public ResponseEntity<ListEventResponse> listMyEvents(
+  public ResponseEntity<ListOwnerEventResponse> listMyEvents(
       @RequestHeader("Authorization") final String authHeader
   ) {
     final var token = firebaseService.decodeToken(authHeader);

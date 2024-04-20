@@ -27,6 +27,8 @@ public class Event {
 
   private Long numberSeats;
 
+  private Long availableSeats;
+
   @Enumerated(EnumType.STRING)
   private EventType type;
 

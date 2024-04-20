@@ -7,6 +7,9 @@ import com.vladdan16.spda_afisha.backend.domain.models.Event;
 import com.vladdan16.spda_afisha.backend.domain.repositories.EventRepository;
 import com.vladdan16.spda_afisha.backend.dto.responses.events.EventResponse;
 import com.vladdan16.spda_afisha.backend.dto.responses.events.ListEventResponse;
+import com.vladdan16.spda_afisha.backend.dto.responses.events.ListOwnerEventResponse;
+import com.vladdan16.spda_afisha.backend.dto.responses.events.OwnerEventResponse;
+import com.vladdan16.spda_afisha.backend.dto.responses.users.UserResponse;
 import com.vladdan16.spda_afisha.backend.service.EventService;
 import com.vladdan16.spda_afisha.backend.service.ImageService;
 import jakarta.transaction.Transactional;
@@ -44,6 +47,7 @@ public class JpaEventService implements EventService {
         .description(description)
         .startAt(startAt)
         .numberSeats(numberSeats)
+        .availableSeats(numberSeats)
         .type(type)
         .build();
     eventRepository.save(event);
@@ -61,6 +65,7 @@ public class JpaEventService implements EventService {
             event.getDescription(),
             event.getStartAt(),
             event.getNumberSeats(),
+            event.getAvailableSeats(),
             event.getType(),
             event.getImages())
         ).toList());
@@ -93,6 +98,7 @@ public class JpaEventService implements EventService {
         event.getDescription(),
         event.getStartAt(),
         event.getNumberSeats(),
+        event.getAvailableSeats(),
         event.getType(),
         event.getImages()
     );
@@ -127,6 +133,7 @@ public class JpaEventService implements EventService {
       event.setStartAt(startAt);
     }
     if (numberSeats != null) {
+      event.setAvailableSeats(event.getAvailableSeats() + numberSeats - event.getNumberSeats());
       event.setNumberSeats(numberSeats);
     }
     if (type != null) {
@@ -135,7 +142,7 @@ public class JpaEventService implements EventService {
   }
 
   @Override
-  public void saveImage(Long eventId, String userId, MultipartFile file) {
+  public String saveImage(Long eventId, String userId, MultipartFile file) {
     var event = eventRepository.getEventById(eventId);
 
     if (event == null) {
@@ -149,6 +156,8 @@ public class JpaEventService implements EventService {
     final var imageName = imageService.storeImage(file);
 
     event.getImages().add(imageName);
+
+    return imageName;
   }
 
   @Override
@@ -171,18 +180,30 @@ public class JpaEventService implements EventService {
   }
 
   @Override
-  public ListEventResponse listMyEvents(String userId) {
-    return new ListEventResponse(eventRepository
+  public ListOwnerEventResponse listMyEvents(String userId) {
+    return new ListOwnerEventResponse(eventRepository
         .findByAuthorId(userId)
         .stream()
-        .map((event) -> new EventResponse(
-            event.getId(),
-            event.getName(),
-            event.getDescription(),
-            event.getStartAt(),
-            event.getNumberSeats(),
-            event.getType(),
-            event.getImages())
+        .map((event) -> {
+              var users = event
+                  .getUsers()
+                  .stream()
+                  .map(user -> new UserResponse(
+                      user.getEmail(),
+                      user.getName(),
+                      user.getSurname())
+                  ).toList();
+              return new OwnerEventResponse(
+                  event.getId(),
+                  event.getName(),
+                  event.getDescription(),
+                  event.getStartAt(),
+                  event.getNumberSeats(),
+                  event.getAvailableSeats(),
+                  event.getType(),
+                  event.getImages(),
+                  users);
+            }
         ).toList());
   }
 }
