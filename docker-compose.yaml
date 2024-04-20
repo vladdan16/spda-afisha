@@ -14,6 +14,7 @@ services:
     image: ghcr.io/vladdan16/spda-afisha-backend:latest
     ports:
       - "8080:8080"
+      - "8082:8082"
     restart: unless-stopped
     networks:
       - back
@@ -25,6 +26,41 @@ services:
       - ./serviceAccountKey.json:/var/spda-afisha-backend/serviceAccountKey.json
       - ./images:/backend/images
 
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--web.enable-lifecycle'
+    ports:
+      - "9090:9090"
+    networks:
+      - back
+
+  grafana:
+    image: grafana/grafana-oss
+    volumes:
+      - grafana:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+    networks:
+      - back
+
 
 networks:
   back:
+
+volumes:
+   prometheus:
+   grafana:
