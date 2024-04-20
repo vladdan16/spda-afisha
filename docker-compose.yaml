@@ -23,6 +23,7 @@ services:
       FIREBASE_SERVICE_ACCOUNT_KEY_PATH: "/var/spda-afisha-backend/serviceAccountKey.json"
     volumes:
       - ./serviceAccountKey.json:/var/spda-afisha-backend/serviceAccountKey.json
+      - ./images:/backend/images
 
 
 networks:

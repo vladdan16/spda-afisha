@@ -3,8 +3,10 @@ package com.vladdan16.spda_afisha.backend.service;
 import com.vladdan16.spda_afisha.backend.domain.models.EventType;
 import com.vladdan16.spda_afisha.backend.dto.responses.events.EventResponse;
 import com.vladdan16.spda_afisha.backend.dto.responses.events.ListEventResponse;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 public interface EventService {
   Long createEvent(
@@ -31,6 +33,10 @@ public interface EventService {
       Long numberSeats,
       EventType type
   );
+
+  void saveImage(Long eventId, String userId, MultipartFile file);
+
+  void deleteImages(Long eventId, String userId, List<String> images);
 
   ListEventResponse listMyEvents(String userId);
 }

@@ -8,19 +8,26 @@ import com.vladdan16.spda_afisha.backend.domain.repositories.EventRepository;
 import com.vladdan16.spda_afisha.backend.dto.responses.events.EventResponse;
 import com.vladdan16.spda_afisha.backend.dto.responses.events.ListEventResponse;
 import com.vladdan16.spda_afisha.backend.service.EventService;
+import com.vladdan16.spda_afisha.backend.service.ImageService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.Timestamp;
+import java.util.HashSet;
+import java.util.List;
 
 
+@Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class JpaEventService implements EventService {
   private final EventRepository eventRepository;
+  private final ImageService imageService;
 
   @Override
   public Long createEvent(
@@ -54,7 +61,8 @@ public class JpaEventService implements EventService {
             event.getDescription(),
             event.getStartAt(),
             event.getNumberSeats(),
-            event.getType())
+            event.getType(),
+            event.getImages())
         ).toList());
   }
 
@@ -62,12 +70,13 @@ public class JpaEventService implements EventService {
   public void deleteEvent(String userId, Long id) {
     var event = eventRepository.getEventById(id);
     if (event == null) {
-      throw new NotFoundException("Event not found", null);
+      throw new NotFoundException("Event not found");
     }
 
     if (!event.getAuthorId().equals(userId)) {
-      throw new ForbiddenException("Unable to delete event not created by current user", null);
-      }
+      throw new ForbiddenException("Unable to delete event not created by current user");
+    }
+    imageService.deleteAllImages(event.getImages());
     eventRepository.deleteById(id);
   }
 
@@ -75,7 +84,7 @@ public class JpaEventService implements EventService {
   public EventResponse getEvent(Long id) {
     var event = eventRepository.getEventById(id);
     if (event == null) {
-      throw new NotFoundException("Event not found", null);
+      throw new NotFoundException("Event not found");
     }
 
     return new EventResponse(
@@ -84,7 +93,8 @@ public class JpaEventService implements EventService {
         event.getDescription(),
         event.getStartAt(),
         event.getNumberSeats(),
-        event.getType()
+        event.getType(),
+        event.getImages()
     );
   }
 
@@ -100,11 +110,11 @@ public class JpaEventService implements EventService {
   ) {
     var event = eventRepository.getEventById(id);
     if (event == null) {
-      throw new NotFoundException("Event not found", null);
+      throw new NotFoundException("Event not found");
     }
 
     if (!event.getAuthorId().equals(userId)) {
-      throw new ForbiddenException("Unable to edit event not created by current user", null);
+      throw new ForbiddenException("Unable to edit event not created by current user");
     }
 
     if (name != null) {
@@ -125,6 +135,42 @@ public class JpaEventService implements EventService {
   }
 
   @Override
+  public void saveImage(Long eventId, String userId, MultipartFile file) {
+    var event = eventRepository.getEventById(eventId);
+
+    if (event == null) {
+      throw new NotFoundException("Event not found");
+    }
+
+    if (!event.getAuthorId().equals(userId)) {
+      throw new ForbiddenException("Unable to edit event not created by current user");
+    }
+
+    final var imageName = imageService.storeImage(file);
+
+    event.getImages().add(imageName);
+  }
+
+  @Override
+  public void deleteImages(Long eventId, String userId, List<String> images) {
+    var event = eventRepository.getEventById(eventId);
+
+    if (event == null) {
+      throw new NotFoundException("Event not found");
+    }
+
+    if (!event.getAuthorId().equals(userId)) {
+      throw new ForbiddenException("Unable to edit event not created by current user");
+    }
+
+    final var set = new HashSet<>(images);
+
+    imageService.deleteAllImages(set.stream().toList());
+
+    event.getImages().removeAll(set);
+  }
+
+  @Override
   public ListEventResponse listMyEvents(String userId) {
     return new ListEventResponse(eventRepository
         .findByAuthorId(userId)
@@ -135,7 +181,8 @@ public class JpaEventService implements EventService {
             event.getDescription(),
             event.getStartAt(),
             event.getNumberSeats(),
-            event.getType())
+            event.getType(),
+            event.getImages())
         ).toList());
   }
 }

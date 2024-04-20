@@ -25,7 +25,7 @@ public class FirebaseTokenFilter extends GenericFilterBean {
     String authToken = httpRequest.getHeader("Authorization");
 
     String path = httpRequest.getRequestURI();
-    if (path.startsWith("/v3/api-docs") || path.startsWith("/swagger-ui")) {
+    if (path.startsWith("/v3/api-docs") || path.startsWith("/swagger-ui") || path.startsWith("/images")) {
       chain.doFilter(request, response);
       return;
     }

@@ -1,9 +1,6 @@
 package com.vladdan16.spda_afisha.backend.controller;
 
-import com.vladdan16.spda_afisha.backend.domain.exceptions.ForbiddenException;
-import com.vladdan16.spda_afisha.backend.domain.exceptions.NotAcceptableException;
-import com.vladdan16.spda_afisha.backend.domain.exceptions.NotFoundException;
-import com.vladdan16.spda_afisha.backend.domain.exceptions.NotAuthorizedException;
+import com.vladdan16.spda_afisha.backend.domain.exceptions.*;
 import com.vladdan16.spda_afisha.backend.dto.responses.ApiErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -55,6 +52,16 @@ public class ExceptionApiHandler {
         e.getClass().getSimpleName(),
         e.getMessage());
     return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(response);
+  }
+
+  @ExceptionHandler(BadRequestException.class)
+  public ResponseEntity<ApiErrorResponse> handleBadRequestException(final BadRequestException e) {
+    ApiErrorResponse response = new ApiErrorResponse(
+        "Bad request",
+        "400",
+        e.getClass().getSimpleName(),
+        e.getMessage());
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
   }
 
   @ExceptionHandler(Exception.class)
