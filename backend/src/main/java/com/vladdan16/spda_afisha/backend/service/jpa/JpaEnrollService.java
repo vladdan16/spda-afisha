@@ -32,6 +32,12 @@ public class JpaEnrollService implements EnrollService {
     if (user.getEvents().contains(event) || event.getUsers().contains(user)) {
       throw new NotAcceptableException("Enroll already exists");
     }
+
+    if (event.getAvailableSeats() <= 0) {
+      throw new NotAcceptableException("No seats available for current event");
+    }
+
+    event.setAvailableSeats(event.getAvailableSeats() - 1);
     user.getEvents().add(event);
     event.getUsers().add(user);
   }
@@ -49,6 +55,7 @@ public class JpaEnrollService implements EnrollService {
     if (!user.getEvents().contains(event) || !event.getUsers().contains(user)) {
       throw new NotAcceptableException("Enroll does not exist");
     }
+    event.setAvailableSeats(event.getAvailableSeats() + 1);
     user.getEvents().remove(event);
     event.getUsers().remove(user);
   }
@@ -69,6 +76,7 @@ public class JpaEnrollService implements EnrollService {
                 event.getDescription(),
                 event.getStartAt(),
                 event.getNumberSeats(),
+                event.getAvailableSeats(),
                 event.getType(),
                 event.getImages()
             ))

@@ -23,11 +23,9 @@ public class JpaUserService implements UserService {
       throw new NotFoundException("User not found");
     }
     return new UserResponse(
-        user.getId(),
         user.getEmail(),
         user.getName(),
-        user.getSurname(),
-        user.getRole());
+        user.getSurname());
   }
 
   @Override

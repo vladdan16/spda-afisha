@@ -1,6 +1,5 @@
 package com.vladdan16.spda_afisha.backend.controller;
 
-import com.vladdan16.spda_afisha.backend.dto.requests.enroll.EnrollRequest;
 import com.vladdan16.spda_afisha.backend.dto.responses.enrolls.ListEnrollResponse;
 import com.vladdan16.spda_afisha.backend.service.EnrollService;
 import com.vladdan16.spda_afisha.backend.service.FirebaseService;
@@ -19,18 +18,18 @@ public class EnrollController {
    * Enrolls user to specified event
    *
    * @param authHeader Authorization token
-   * @param request    Request with Long event ID
+   * @param eventId    Long event ID
    * @return Void
    */
   @PostMapping
   public ResponseEntity<Void> createEnroll(
       @RequestHeader("Authorization") final String authHeader,
-      @RequestBody final EnrollRequest request
+      @RequestParam final Long eventId
   ) {
     final var token = firebaseService.decodeToken(authHeader);
     enrollService.createEnroll(
         token.getUid(),
-        request.eventId()
+        eventId
     );
     return ResponseEntity.ok().build();
   }
@@ -39,18 +38,18 @@ public class EnrollController {
    * Cancels the user's enroll
    *
    * @param authHeader Authorization token
-   * @param request    Request with Long event ID
+   * @param eventId    Long event ID
    * @return Void
    */
   @DeleteMapping
   public ResponseEntity<Void> deleteEnroll(
       @RequestHeader("Authorization") final String authHeader,
-      @RequestBody final EnrollRequest request
+      @RequestParam final Long eventId
   ) {
     final var token = firebaseService.decodeToken(authHeader);
     enrollService.deleteEnroll(
         token.getUid(),
-        request.eventId()
+        eventId
     );
     return ResponseEntity.ok().build();
   }
