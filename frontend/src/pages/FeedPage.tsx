@@ -36,7 +36,7 @@ export function Page() {
             </div>
             <div className="flex flex-col px-20">
               {Object.keys(categories).map((category) => (
-                <div className="py-10">
+                <div className="py-10" key={category}>
                   <div className="text-black text-[48px] font-bold font-Montserrat py-4">
                     {type2ru.get(category)}
                   </div>
