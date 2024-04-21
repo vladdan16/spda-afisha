@@ -4,6 +4,7 @@ export interface IEvent {
   description: string;
   start_at: Date;
   type: "MEETUP" | "CONFERENCE" | "CONCERT" | "OTHER";
+  // place: string;
   // available_seats: number;
   // number_seats: number;
   // images: string[];
