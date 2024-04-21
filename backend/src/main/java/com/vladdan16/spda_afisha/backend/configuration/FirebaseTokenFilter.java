@@ -1,5 +1,6 @@
 package com.vladdan16.spda_afisha.backend.configuration;
 
+import com.github.loki4j.slf4j.marker.LabelMarker;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseToken;
 import jakarta.servlet.FilterChain;
@@ -11,6 +12,12 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.filter.GenericFilterBean;
 
+import java.util.Map;
+
+/**
+ * Filter that filters all incoming http requests
+ * Checks for valid token except for specified paths
+ */
 @Slf4j
 public class FirebaseTokenFilter extends GenericFilterBean {
   @SneakyThrows
@@ -25,7 +32,11 @@ public class FirebaseTokenFilter extends GenericFilterBean {
     String authToken = httpRequest.getHeader("Authorization");
 
     String path = httpRequest.getRequestURI();
-    if (path.startsWith("/v3/api-docs") || path.startsWith("/swagger-ui") || path.startsWith("/images")) {
+    LabelMarker marker = LabelMarker.of("path", () -> path);
+    // specify paths that does not require authorization
+    if (path.startsWith("/v3/api-docs") || path.startsWith("/swagger-ui")
+        || path.startsWith("/images") || path.startsWith("/observability")) {
+      log.info(marker, "Skip authorisation for route {}", path);
       chain.doFilter(request, response);
       return;
     }
@@ -36,13 +47,18 @@ public class FirebaseTokenFilter extends GenericFilterBean {
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         FirebaseToken decodedToken = firebaseAuth
             .verifyIdToken(authToken);
-        log.info("Token verified: {}", decodedToken.getUid());
+        LabelMarker userMarker = LabelMarker.of(() -> Map.of(
+            "path", path,
+            "uid", decodedToken.getUid()));
+        log.info(userMarker, "Request authorized for path {}", path);
         chain.doFilter(request, response);
       } else {
-        httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Not authorized");
+        log.info(marker, "Unauthorized, empty token for route {}", path);
+        httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Not authorized, provide Authorization token");
       }
     } catch (Exception e) {
       httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid authorization token");
+      log.info(marker, "Unauthorized, invalid token for route {}", path);
     }
   }
 }

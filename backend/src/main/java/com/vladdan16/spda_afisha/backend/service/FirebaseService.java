@@ -5,6 +5,10 @@ import com.google.firebase.auth.FirebaseToken;
 import com.vladdan16.spda_afisha.backend.domain.exceptions.NotAuthorizedException;
 import org.springframework.stereotype.Service;
 
+/**
+ * Service that is responsible for extracting information about user
+ * from authorization token
+ */
 @Service
 public class FirebaseService {
   public FirebaseToken decodeToken(String header) {

@@ -12,6 +12,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 
+/**
+ * Firebase configuration
+ * <p>
+ * Firebase is used to handle authorization
+ * <p>
+ * To work correctly [FIREBASE_SERVICE_ACCOUNT_KEY_PATH] should be set as environment variable
+ */
 @Slf4j
 @Configuration
 public class FirebaseConfig {

@@ -14,10 +14,10 @@ services:
     image: ghcr.io/vladdan16/spda-afisha-backend:latest
     ports:
       - "8080:8080"
-      - "8082:8082"
     restart: unless-stopped
     networks:
       - back
+      - metrics
     depends_on:
       - postgres
     environment:
@@ -37,13 +37,17 @@ services:
       - '--web.console.libraries=/etc/prometheus/console_libraries'
       - '--web.console.templates=/etc/prometheus/consoles'
       - '--web.enable-lifecycle'
-    ports:
-      - "9090:9090"
     networks:
-      - back
+      - metrics
+
+  loki:
+    image: grafana/loki:latest
+    command: -config.file=/etc/loki/local-config.yaml
+    networks:
+      - metrics
 
   grafana:
-    image: grafana/grafana-oss
+    image: grafana/grafana:latest
     volumes:
       - grafana:/var/lib/grafana
     environment:
@@ -54,12 +58,33 @@ services:
       - "3000:3000"
     depends_on:
       - prometheus
+      - loki
     networks:
-      - back
+      - metrics
+    entrypoint:
+      - sh
+      - -euc
+      - |
+        mkdir -p /etc/grafana/provisioning/datasources
+        cat <<EOF > /etc/grafana/provisioning/datasources/ds.yaml
+        apiVersion: 1
+        datasources:
+        - name: Loki
+          type: loki
+          access: proxy
+          orgId: 1
+          url: http://loki:3100
+          basicAuth: false
+          isDefault: true
+          version: 1
+          editable: false
+        EOF
+        /run.sh
 
 
 networks:
   back:
+  metrics:
 
 volumes:
    prometheus:
