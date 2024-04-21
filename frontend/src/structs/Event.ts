@@ -2,17 +2,28 @@ export interface IEvent {
   id: number;
   name: string;
   description: string;
-  startAt: Date;
-  numberSeats: number;
+  start_at: Date;
   type: "MEETUP" | "CONFERENCE" | "CONCERT" | "OTHER";
+  // available_seats: number;
+  // number_seats: number;
+  // images: string[];
 }
 
-export class EnrolledEvent {
-  event: IEvent;
+export class EnrolledEvent implements IEvent {
+  id: number;
+  name: string;
+  description: string;
+  start_at: Date;
+  type: "MEETUP" | "CONFERENCE" | "CONCERT" | "OTHER";
+
   isEnrolled: boolean;
 
   constructor({ event, isEnrolled }: { event: IEvent; isEnrolled: boolean }) {
-    this.event = event;
+    this.id = event.id;
+    this.name = event.description;
+    this.description = event.description;
+    this.start_at = event.start_at;
+    this.type = event.type;
     this.isEnrolled = isEnrolled;
   }
 }

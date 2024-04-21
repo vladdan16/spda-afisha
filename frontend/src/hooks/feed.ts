@@ -13,7 +13,7 @@ export function useFeed() {
     undefined
   ); // EnrolledEvent[] = complete | undefined = loading | Error = error
 
-  let _ennrollmentsIds: number[] = [];
+  let _enrollmentsIds: number[] = [];
   let _rawEvents: IEvent[] = [];
 
   function _syncEventsProjection() {
@@ -22,7 +22,7 @@ export function useFeed() {
         (e) =>
           new EnrolledEvent({
             event: e,
-            isEnrolled: _ennrollmentsIds.includes(e.id),
+            isEnrolled: _enrollmentsIds.includes(e.id),
           })
       )
     );
@@ -32,29 +32,28 @@ export function useFeed() {
     try {
       _setState(undefined);
 
-      _ennrollmentsIds = (await afisha.getMyEnrollments(accessToken)).map(
-        (e) => e.id
-      );
-      _rawEvents = await afisha.getEventsList(accessToken);
+      const events = await afisha.getEventsList();
+      _enrollmentsIds = events.map((e) => e.id);
+      _rawEvents = await afisha.getEventsList();
 
       _syncEventsProjection();
     } catch (e: any) {
-      console.error("Authentication error: ", e);
+      console.error("Fetching error: ", e);
       _setState(Error(e.message));
     }
   }
 
   async function toggleEventEnrollment(event_id: number) {
     try {
-      const wasEnrolled = _ennrollmentsIds.includes(event_id);
+      const wasEnrolled = _enrollmentsIds.includes(event_id);
 
       const switchEnrollment = wasEnrolled ? afisha.unenroll : afisha.enroll;
       await switchEnrollment(accessToken, event_id);
 
       if (wasEnrolled) {
-        _ennrollmentsIds = _ennrollmentsIds.filter((id) => id !== event_id);
+        _enrollmentsIds = _enrollmentsIds.filter((id) => id !== event_id);
       } else {
-        _ennrollmentsIds.push(event_id);
+        _enrollmentsIds.push(event_id);
       }
 
       _syncEventsProjection();

@@ -10,7 +10,7 @@ export function splitEventsByCategories(
   const eventsByCategory: EventsByCategory = {};
 
   events.forEach((event) => {
-    const category = event.event.type;
+    const category = event.type;
 
     if (!eventsByCategory[category]) {
       eventsByCategory[category] = [];

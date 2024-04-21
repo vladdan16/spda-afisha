@@ -44,13 +44,13 @@ export function Page() {
                     <div className="flex flex-row">
                       {categories[category].map((event) => (
                         <Poster
-                          title={event.event.name}
-                          subtitle={`${event.event.startAt.toLocaleString()}, ${
-                            event.event.description
+                          title={event.name}
+                          subtitle={`${event.start_at.toLocaleString()}, ${
+                            event.description
                           }`}
                           isEnrolled={event.isEnrolled}
-                          toggle={() => toggleEventEnrollment(event.event.id)}
-                          key={event.event.id}
+                          toggle={() => toggleEventEnrollment(event.id)}
+                          key={event.id}
                         />
                       ))}
                     </div>
