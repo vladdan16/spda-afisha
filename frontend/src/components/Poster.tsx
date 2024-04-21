@@ -1,11 +1,20 @@
+const options: Intl.DateTimeFormatOptions = {
+  day: "numeric", // Numeric day
+  month: "long", // Full month name
+  hour: "numeric", // Numeric hour
+  minute: "numeric", // Numeric minute
+  hour12: false, // Use 24-hour time format
+};
+const formatter = new Intl.DateTimeFormat("ru-RU", options);
+
 export function Poster({
   title,
-  subtitle,
+  time,
   isEnrolled,
   toggle,
 }: {
   title: string;
-  subtitle: string;
+  time: Date;
   isEnrolled: boolean;
   toggle: () => void;
 }) {
@@ -26,7 +35,7 @@ export function Poster({
         {title}
       </div>
       <div className="left-[5px] top-[236px] absolute text-zinc-800 text-base font-semibold font-Montserrat">
-        {subtitle}
+        {formatter.format(time)}
       </div>
     </div>
   );

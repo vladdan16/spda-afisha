@@ -45,9 +45,7 @@ export function Page() {
                       {categories[category].map((event) => (
                         <Poster
                           title={event.name}
-                          subtitle={`${event.start_at.toLocaleString()}, ${
-                            event.description
-                          }`}
+                          time={event.start_at}
                           isEnrolled={event.isEnrolled}
                           toggle={() => toggleEventEnrollment(event.id)}
                           key={event.id}
