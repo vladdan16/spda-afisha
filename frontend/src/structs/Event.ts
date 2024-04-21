@@ -20,7 +20,7 @@ export class EnrolledEvent implements IEvent {
 
   constructor({ event, isEnrolled }: { event: IEvent; isEnrolled: boolean }) {
     this.id = event.id;
-    this.name = event.description;
+    this.name = event.name;
     this.description = event.description;
     this.start_at = event.start_at;
     this.type = event.type;
