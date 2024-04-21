@@ -7,6 +7,7 @@ import java.sql.Timestamp;
 
 public record CreateEventRequest(
     String name,
+    String place,
     String description,
     @JsonProperty("start_at")
     Timestamp startAt,

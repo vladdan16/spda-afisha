@@ -73,6 +73,7 @@ public class JpaEnrollService implements EnrollService {
             .map(event -> new EventResponse(
                 event.getId(),
                 event.getName(),
+                event.getPlace(),
                 event.getDescription(),
                 event.getStartAt(),
                 event.getNumberSeats(),

@@ -18,6 +18,7 @@ public interface EventService {
    *
    * @param userId      String user id - author of event
    * @param name        String short title of event
+   * @param place       String name of place
    * @param description String description for event
    * @param startAt     Timestamp when event is started
    * @param numberSeats Number of seats available is this event
@@ -27,6 +28,7 @@ public interface EventService {
   Long createEvent(
       String userId,
       String name,
+      String place,
       String description,
       Timestamp startAt,
       Long numberSeats,
@@ -63,6 +65,7 @@ public interface EventService {
    * @param userId      String user id - author of event
    * @param id          Long id of event
    * @param name        String short title of event
+   * @param place       String name of place
    * @param description String description for event
    * @param startAt     Timestamp when event is started
    * @param numberSeats Number of seats available is this event
@@ -72,6 +75,7 @@ public interface EventService {
       String userId,
       Long id,
       String name,
+      String place,
       String description,
       Timestamp startAt,
       Long numberSeats,

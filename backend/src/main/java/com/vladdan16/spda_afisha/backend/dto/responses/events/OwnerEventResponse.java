@@ -11,6 +11,7 @@ import java.util.List;
 public record OwnerEventResponse(
     Long id,
     String name,
+    String place,
     String description,
     @JsonProperty("start_at")
     Timestamp startAt,

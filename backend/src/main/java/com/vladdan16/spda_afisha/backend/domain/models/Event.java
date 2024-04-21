@@ -21,6 +21,8 @@ public class Event {
 
   private String name;
 
+  private String place;
+
   private String description;
 
   private Timestamp startAt;

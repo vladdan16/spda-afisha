@@ -10,6 +10,7 @@ import java.util.List;
 public record EventResponse(
     Long id,
     String name,
+    String place,
     String description,
     @JsonProperty("start_at")
     Timestamp startAt,

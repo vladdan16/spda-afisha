@@ -10,6 +10,7 @@ public record UpdateEventRequest(
     @NotNull
     Long id,
     String name,
+    String place,
     String description,
     @JsonProperty("start_at")
     Timestamp startAt,
