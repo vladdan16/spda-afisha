@@ -11,3 +11,9 @@ export function clearToken() {
 export function getToken() {
   return localStorage.getItem(key);
 }
+
+export function ensureToken() {
+  const res = getToken();
+  if (res === null) throw Error("No access token");
+  return res;
+}

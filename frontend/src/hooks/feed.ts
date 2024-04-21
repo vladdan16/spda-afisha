@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { AfishaContext } from "../contexts/Afisha";
-import { getToken } from "../services/TokenStore";
+import { ensureToken } from "../services/TokenStore";
 import { EnrolledEvent, IEvent } from "../structs/Event";
 import { ErrorModalContext } from "../contexts/ErrorModal";
 
@@ -35,9 +35,11 @@ export function useFeed() {
     try {
       _setState(undefined);
 
-      const events = await afisha.getEventsList();
+      const accessToken = ensureToken();
+
+      const events = await afisha.getEventsList(accessToken);
       _enrollmentsIds = events.map((e) => e.id);
-      _rawEvents = await afisha.getEventsList();
+      _rawEvents = await afisha.getEventsList(accessToken);
 
       _syncEventsProjection();
     } catch (e: any) {
@@ -48,8 +50,7 @@ export function useFeed() {
 
   async function toggleEventEnrollment(event_id: number) {
     try {
-      const accessToken = getToken();
-      if (accessToken === null) throw Error("No access token");
+      const accessToken = ensureToken();
 
       const wasEnrolled = _enrollmentsIds.includes(event_id);
 
