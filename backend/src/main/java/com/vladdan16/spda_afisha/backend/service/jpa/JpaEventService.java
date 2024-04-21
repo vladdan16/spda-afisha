@@ -34,6 +34,7 @@ public class JpaEventService implements EventService {
   public Long createEvent(
       String userId,
       String name,
+      String place,
       String description,
       Timestamp startAt,
       Long numberSeats,
@@ -42,6 +43,7 @@ public class JpaEventService implements EventService {
     var event = Event.builder()
         .authorId(userId)
         .name(name)
+        .place(place)
         .description(description)
         .startAt(startAt)
         .numberSeats(numberSeats)
@@ -60,6 +62,7 @@ public class JpaEventService implements EventService {
         .map((event) -> new EventResponse(
             event.getId(),
             event.getName(),
+            event.getPlace(),
             event.getDescription(),
             event.getStartAt(),
             event.getNumberSeats(),
@@ -93,6 +96,7 @@ public class JpaEventService implements EventService {
     return new EventResponse(
         event.getId(),
         event.getName(),
+        event.getPlace(),
         event.getDescription(),
         event.getStartAt(),
         event.getNumberSeats(),
@@ -107,6 +111,7 @@ public class JpaEventService implements EventService {
       String userId,
       @NotNull Long id,
       String name,
+      String place,
       String description,
       Timestamp startAt,
       Long numberSeats,
@@ -123,6 +128,9 @@ public class JpaEventService implements EventService {
 
     if (name != null) {
       event.setName(name);
+    }
+    if (place != null) {
+      event.setPlace(place);
     }
     if (description != null) {
       event.setDescription(description);
@@ -194,6 +202,7 @@ public class JpaEventService implements EventService {
               return new OwnerEventResponse(
                   event.getId(),
                   event.getName(),
+                  event.getPlace(),
                   event.getDescription(),
                   event.getStartAt(),
                   event.getNumberSeats(),

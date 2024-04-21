@@ -41,6 +41,7 @@ public class EventController {
     final var id = eventService.createEvent(
         token.getUid(),
         request.name(),
+        request.place(),
         request.description(),
         request.startAt(),
         request.numberSeats(),
@@ -125,6 +126,7 @@ public class EventController {
         token.getUid(),
         request.id(),
         request.name(),
+        request.place(),
         request.description(),
         request.startAt(),
         request.numberSeats(),

@@ -6,6 +6,7 @@ import com.vladdan16.spda_afisha.backend.dto.responses.ApiErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -74,6 +75,19 @@ public class ExceptionApiHandler {
 
     ApiErrorResponse response = new ApiErrorResponse(
         "Bad request",
+        "400",
+        e.getClass().getSimpleName(),
+        e.getMessage());
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+  }
+
+  @ExceptionHandler(MissingRequestHeaderException.class)
+  public ResponseEntity<ApiErrorResponse> handleMissingRequestHeaderException(final MissingRequestHeaderException e) {
+    LabelMarker marker = LabelMarker.of("error_code", () -> "400");
+    log.info(marker, e.getMessage());
+
+    ApiErrorResponse response = new ApiErrorResponse(
+        "Missing request header",
         "400",
         e.getClass().getSimpleName(),
         e.getMessage());

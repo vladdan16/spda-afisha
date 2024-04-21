@@ -35,7 +35,8 @@ public class FirebaseTokenFilter extends GenericFilterBean {
     LabelMarker marker = LabelMarker.of("path", () -> path);
     // specify paths that does not require authorization
     if (path.startsWith("/v3/api-docs") || path.startsWith("/swagger-ui")
-        || path.startsWith("/images") || path.startsWith("/observability")) {
+        || path.startsWith("/images") || path.startsWith("/observability")
+        || path.startsWith("/event/list") || (httpRequest.getMethod().equals("GET") && path.startsWith("/event"))) {
       log.info(marker, "Skip authorisation for route {}", path);
       chain.doFilter(request, response);
       return;
