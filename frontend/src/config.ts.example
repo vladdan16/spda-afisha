@@ -7,4 +7,4 @@ export const firebase = {
   appId: "1:xxx:web:xxx",
 };
 
-export const afishaApi = "http://xxx.xxx.xxx.xxx";
+export const afishaApi = "mock"; // "http://xxx.xxx.xxx.xxx";
