@@ -1,5 +1,6 @@
 package com.vladdan16.spda_afisha.backend.service.jpa;
 
+import com.vladdan16.spda_afisha.backend.domain.exceptions.NotAcceptableException;
 import com.vladdan16.spda_afisha.backend.domain.exceptions.NotFoundException;
 import com.vladdan16.spda_afisha.backend.domain.models.User;
 import com.vladdan16.spda_afisha.backend.domain.models.UserRole;
@@ -44,7 +45,12 @@ public class JpaUserService implements UserService {
       String name,
       String surname
   ) {
-    final var user = User.builder()
+    var user = userRepository.getUserById(uid);
+    if (user != null) {
+      throw new NotAcceptableException("User already exists");
+    }
+
+    user = User.builder()
         .id(uid)
         .email(email)
         .name(name)

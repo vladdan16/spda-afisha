@@ -15,7 +15,6 @@ import com.vladdan16.spda_afisha.backend.service.ImageService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,7 +23,6 @@ import java.util.HashSet;
 import java.util.List;
 
 
-@Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor

@@ -1,5 +1,6 @@
 package com.vladdan16.spda_afisha.backend.controller;
 
+import com.github.loki4j.slf4j.marker.LabelMarker;
 import com.vladdan16.spda_afisha.backend.domain.exceptions.*;
 import com.vladdan16.spda_afisha.backend.dto.responses.ApiErrorResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +17,9 @@ import java.util.List;
 public class ExceptionApiHandler {
   @ExceptionHandler(NotFoundException.class)
   public ResponseEntity<ApiErrorResponse> handleNotFoundException(final NotFoundException e) {
+    LabelMarker marker = LabelMarker.of("error_code", () -> "404");
+    log.info(marker, e.getMessage());
+
     ApiErrorResponse response = new ApiErrorResponse(
         "Not found",
         "404",
@@ -26,6 +30,9 @@ public class ExceptionApiHandler {
 
   @ExceptionHandler(NotAuthorizedException.class)
   public ResponseEntity<ApiErrorResponse> handleNotAuthorizedException(final NotAuthorizedException e) {
+    LabelMarker marker = LabelMarker.of("error_code", () -> "401");
+    log.info(marker, e.getMessage());
+
     ApiErrorResponse response = new ApiErrorResponse(
         "Not authorized",
         "401",
@@ -36,6 +43,9 @@ public class ExceptionApiHandler {
 
   @ExceptionHandler(ForbiddenException.class)
   public ResponseEntity<ApiErrorResponse> handleForbiddenException(final ForbiddenException e) {
+    LabelMarker marker = LabelMarker.of("error_code", () -> "403");
+    log.info(marker, e.getMessage());
+
     ApiErrorResponse response = new ApiErrorResponse(
         "Forbidden",
         "403",
@@ -46,6 +56,9 @@ public class ExceptionApiHandler {
 
   @ExceptionHandler(NotAcceptableException.class)
   public ResponseEntity<ApiErrorResponse> handleNotAcceptableException(final NotAcceptableException e) {
+    LabelMarker marker = LabelMarker.of("error_code", () -> "406");
+    log.info(marker, e.getMessage());
+
     ApiErrorResponse response = new ApiErrorResponse(
         "Not acceptable",
         "406",
@@ -56,6 +69,9 @@ public class ExceptionApiHandler {
 
   @ExceptionHandler(BadRequestException.class)
   public ResponseEntity<ApiErrorResponse> handleBadRequestException(final BadRequestException e) {
+    LabelMarker marker = LabelMarker.of("error_code", () -> "400");
+    log.info(marker, e.getMessage());
+
     ApiErrorResponse response = new ApiErrorResponse(
         "Bad request",
         "400",
@@ -66,8 +82,11 @@ public class ExceptionApiHandler {
 
   @ExceptionHandler(Exception.class)
   public ResponseEntity<ApiErrorResponse> handleException(final Exception e) {
+    LabelMarker marker = LabelMarker.of("error_code", () -> "500");
+    log.error(marker, e.getMessage());
     List<String> errors = List.of(Arrays.toString(e.getStackTrace()));
     log.error(errors.toString());
+
     ApiErrorResponse response = new ApiErrorResponse(
         "Internal Server Error",
         "500",

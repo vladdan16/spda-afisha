@@ -14,11 +14,20 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.UUID;
 
-@Service
+/**
+ * Service that is responsible for interactions with images
+ */
 @Slf4j
+@Service
 public class ImageService {
   private final static String UPLOAD_DIR = "images/";
 
+  /**
+   * Stores image
+   *
+   * @param file Multipart file
+   * @return String name of saved image
+   */
   public String storeImage(MultipartFile file) {
     try {
       if (file.isEmpty()) {
@@ -46,6 +55,12 @@ public class ImageService {
     }
   }
 
+  /**
+   * Finds and returns image by given name
+   *
+   * @param imageName String name of image
+   * @return byte array - image
+   */
   public byte[] getImage(String imageName) {
     try {
       Path imagePath = Paths.get(UPLOAD_DIR, imageName);
@@ -55,6 +70,11 @@ public class ImageService {
     }
   }
 
+  /**
+   * Deletes image by given image name
+   *
+   * @param imageName String name os image
+   */
   public void deleteImage(String imageName) {
     try {
       Files.deleteIfExists(Paths.get(UPLOAD_DIR, imageName));
@@ -63,6 +83,11 @@ public class ImageService {
     }
   }
 
+  /**
+   * Deletes all specified images
+   *
+   * @param images List of Strings - image names
+   */
   public void deleteAllImages(List<String> images) {
     for (var image : images) {
       deleteImage(image);

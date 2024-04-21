@@ -1,12 +1,17 @@
 package com.vladdan16.spda_afisha.backend.controller;
 
+import com.github.loki4j.slf4j.marker.LabelMarker;
 import com.vladdan16.spda_afisha.backend.dto.responses.enrolls.ListEnrollResponse;
 import com.vladdan16.spda_afisha.backend.service.EnrollService;
 import com.vladdan16.spda_afisha.backend.service.FirebaseService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
+@Slf4j
 @RestController
 @RequestMapping("/enroll")
 @RequiredArgsConstructor
@@ -31,6 +36,13 @@ public class EnrollController {
         token.getUid(),
         eventId
     );
+
+    LabelMarker marker = LabelMarker.of(() -> Map.of(
+        "uid", token.getUid(),
+        "event_id", eventId.toString()
+    ));
+    log.info(marker, "User successfully enrolled");
+
     return ResponseEntity.ok().build();
   }
 
@@ -51,6 +63,13 @@ public class EnrollController {
         token.getUid(),
         eventId
     );
+
+    LabelMarker marker = LabelMarker.of(() -> Map.of(
+        "uid", token.getUid(),
+        "event_id", eventId.toString()
+    ));
+    log.info(marker, "User successfully unenrolled");
+
     return ResponseEntity.ok().build();
   }
 
@@ -68,6 +87,10 @@ public class EnrollController {
     final var response = enrollService.getEnrollsByUser(
         token.getUid()
     );
+
+    LabelMarker marker = LabelMarker.of("uid", token::getUid);
+    log.info(marker, "User retrieved their enrolls");
+
     return ResponseEntity.ok(response);
   }
 }

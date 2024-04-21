@@ -26,7 +26,6 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
-//    implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-configuration-processor")
@@ -34,9 +33,11 @@ dependencies {
     // security
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("com.google.firebase:firebase-admin:9.2.0")
-//    implementation("io.micrometer:micrometer-registry-prometheus:1.12.4")
-//    implementation("io.micrometer:micrometer-tracing-bridge-brave:1.2.4")
-//    implementation("org.liquibase:liquibase-core")
+    // metrics and logs
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation("io.micrometer:micrometer-registry-prometheus:1.12.5")
+    implementation("io.micrometer:micrometer-tracing-bridge-brave:1.2.5")
+    implementation("com.github.loki4j:loki-logback-appender:1.5.1")
 
     compileOnly("org.projectlombok:lombok")
 
