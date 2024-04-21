@@ -7,11 +7,14 @@ import { ErrorModalContext } from "../contexts/ErrorModal";
 export function useFeed() {
   const errorModal = useContext(ErrorModalContext)!;
   const afisha = useContext(AfishaContext)!;
-  const accessToken = getToken()!;
 
   const [state, _setState] = useState<EnrolledEvent[] | undefined | Error>(
     undefined
   ); // EnrolledEvent[] = complete | undefined = loading | Error = error
+
+  useEffect(() => {
+    _fetchEvents();
+  }, []);
 
   let _enrollmentsIds: number[] = [];
   let _rawEvents: IEvent[] = [];
@@ -45,6 +48,9 @@ export function useFeed() {
 
   async function toggleEventEnrollment(event_id: number) {
     try {
+      const accessToken = getToken();
+      if (accessToken === null) throw Error("No access token");
+
       const wasEnrolled = _enrollmentsIds.includes(event_id);
 
       const switchEnrollment = wasEnrolled ? afisha.unenroll : afisha.enroll;
@@ -62,10 +68,6 @@ export function useFeed() {
       errorModal.open(e.message);
     }
   }
-
-  useEffect(() => {
-    _fetchEvents();
-  }, []);
 
   return { state, toggleEventEnrollment };
 }
