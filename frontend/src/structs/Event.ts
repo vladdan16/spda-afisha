@@ -1,3 +1,11 @@
+export interface IRawEvent {
+  id: number;
+  name: string;
+  description: string;
+  start_at: Date | string;
+  type: "MEETUP" | "CONFERENCE" | "CONCERT" | "OTHER";
+}
+
 export interface IEvent {
   id: number;
   name: string;

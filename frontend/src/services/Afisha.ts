@@ -1,10 +1,10 @@
 import axios, { AxiosInstance } from "axios";
-import { IEvent } from "../structs/Event";
+import { IEvent, IRawEvent } from "../structs/Event";
 import { configFromAccessToken } from "../utils/rest";
 import { delay } from "../utils/async";
 
 export interface IAfisha {
-  getEventsList(accessToken: string): Promise<IEvent[]>;
+  getEventsList(): Promise<IEvent[]>;
   getMyEnrollments(accessToken: string): Promise<IEvent[]>;
   enroll(accessToken: string, eventId: number): Promise<void>;
   unenroll(accessToken: string, eventId: number): Promise<void>;
@@ -19,20 +19,26 @@ export class RestAfisha implements IAfisha {
     });
   }
 
-  async getEventsList(accessToken: string): Promise<IEvent[]> {
-    const response = await this.axiosInstance.get<{ events: IEvent[] }>(
-      "/event/list",
-      configFromAccessToken(accessToken)
+  private convertEventDates(events: IRawEvent[]): IEvent[] {
+    return events.map((event) => ({
+      ...event,
+      start_at: new Date(event.start_at), // Convert string to Date object
+    }));
+  }
+
+  async getEventsList(): Promise<IEvent[]> {
+    const response = await this.axiosInstance.get<{ events: IRawEvent[] }>(
+      "/event/list"
     );
-    return response.data.events;
+    return this.convertEventDates(response.data.events);
   }
 
   async getMyEnrollments(accessToken: string): Promise<IEvent[]> {
-    const response = await this.axiosInstance.get<{ events: IEvent[] }>(
+    const response = await this.axiosInstance.get<{ events: IRawEvent[] }>(
       "/event/my_events",
       configFromAccessToken(accessToken)
     );
-    return response.data.events;
+    return this.convertEventDates(response.data.events);
   }
 
   async enroll(accessToken: string, eventId: number): Promise<void> {

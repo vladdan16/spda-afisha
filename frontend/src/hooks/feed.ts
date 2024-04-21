@@ -35,11 +35,9 @@ export function useFeed() {
     try {
       _setState(undefined);
 
-      const accessToken = ensureToken();
-
-      const events = await afisha.getEventsList(accessToken);
+      const events = await afisha.getEventsList();
       _enrollmentsIds = events.map((e) => e.id);
-      _rawEvents = await afisha.getEventsList(accessToken);
+      _rawEvents = await afisha.getEventsList();
 
       _syncEventsProjection();
     } catch (e: any) {
