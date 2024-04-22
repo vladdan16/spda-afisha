@@ -14,7 +14,7 @@ export function Navigation({ loggedIn }: { loggedIn: boolean }) {
   };
 
   return (
-    <nav className="h-[100px] flex justify-between px-20 bg-white items-center">
+    <nav className="flex justify-between px-20 py-4 bg-white items-center">
       <Link to={Feed.path}>
         <div className="text-blue-800 text-[40px] font-black font-Montserrat">
           Aфиша
