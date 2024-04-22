@@ -49,9 +49,10 @@ export function useFeed() {
     try {
       const wasEnrolled = _enrollmentsIds.includes(event_id);
 
+      const personal = afisha.personal;
       const switchEnrollment = wasEnrolled
-        ? afisha.personal.unenroll
-        : afisha.personal.enroll;
+        ? personal.unenroll.bind(personal)
+        : personal.enroll.bind(personal);
       await switchEnrollment(event_id);
 
       if (wasEnrolled) {
