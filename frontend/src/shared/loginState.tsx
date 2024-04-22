@@ -1,6 +1,6 @@
 import { Navigate } from "react-router-dom";
 import { useAuthenticationCheck } from "../hooks/authentication";
-import { CenterLoading } from "../components/CenterLoading";
+import { CenterHLoading } from "../components/CenterHLoading";
 
 function _ensureState(
   expectedToBeLoggedIn: boolean,
@@ -13,7 +13,7 @@ function _ensureState(
   if (loading) {
     return (
       <div className="flex flex-col h-screen">
-        <CenterLoading />
+        <CenterHLoading />
       </div>
     );
   }
