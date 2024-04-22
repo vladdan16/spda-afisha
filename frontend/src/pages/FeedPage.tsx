@@ -59,7 +59,7 @@ export function Page() {
       return (
         <div className="flex flex-col h-screen">
           <Navigation loggedIn={true} />
-          {body}
+          <div className="flex-grow">{body}</div>
         </div>
       );
     },
