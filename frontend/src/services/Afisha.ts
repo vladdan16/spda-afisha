@@ -1,3 +1,5 @@
+// tags: [SERVICE, SERVICE_INTERFACE, SERVICE_IMPLs]
+
 import axios, { AxiosInstance } from "axios";
 import { IEvent, IRawEvent } from "../structs/Event";
 import { configFromAccessToken } from "../utils/rest";

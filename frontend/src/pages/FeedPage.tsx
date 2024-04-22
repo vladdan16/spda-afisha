@@ -4,8 +4,8 @@ import * as Entry from "../pages/EntryPage";
 import { useFeed } from "../hooks/feed";
 import { splitEventsByCategories, type2ru } from "../utils/event";
 import { ErrorMsg } from "../components/ErrorMsg";
-import { Loading } from "../components/Loading";
 import { Poster } from "../components/Poster";
+import { CenterLoading } from "../components/CenterLoading";
 
 export const path = "/feed";
 
@@ -18,11 +18,7 @@ export function Page() {
       let body;
 
       if (state === undefined) {
-        body = (
-          <div className="flex justify-center items-center h-full">
-            <Loading />
-          </div>
-        );
+        body = <CenterLoading />;
       } else if (state instanceof Error) {
         body = <ErrorMsg msg={state.message} />;
       } else {
@@ -61,10 +57,10 @@ export function Page() {
       }
 
       return (
-        <>
+        <div className="flex flex-col h-screen">
           <Navigation loggedIn={true} />
           {body}
-        </>
+        </div>
       );
     },
   });

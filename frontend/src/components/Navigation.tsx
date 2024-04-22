@@ -1,15 +1,15 @@
 import { Link, useNavigate } from "react-router-dom";
 
-import { clearToken } from "../services/TokenStore";
 import * as Entry from "../pages/EntryPage";
 import * as Dashboard from "../pages/DashboardPage";
 import * as Feed from "../pages/FeedPage";
+import { signOut } from "../services/Authenticator";
 
 export function Navigation({ loggedIn }: { loggedIn: boolean }) {
   const navigate = useNavigate();
 
-  const exit = () => {
-    clearToken();
+  const exit = async () => {
+    await signOut();
     navigate(Entry.path);
   };
 

@@ -1,13 +1,8 @@
 import { useContext, useState } from "react";
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-} from "firebase/auth";
-import { auth } from "../firebase";
-import { setToken } from "../services/TokenStore";
 import { useNavigate } from "react-router-dom";
 import * as Feed from "../pages/FeedPage";
 import { ErrorModalContext } from "../contexts/ErrorModal";
+import { enterWithEmailAndPassword } from "../services/Authenticator";
 
 export function useEntry() {
   const navigate = useNavigate();
@@ -25,14 +20,8 @@ export function useEntry() {
   const enter = async () => {
     setLoading(true);
     try {
-      const entry = isRegistered
-        ? signInWithEmailAndPassword
-        : createUserWithEmailAndPassword;
-      const res = await entry(auth, email, password);
-
-      setToken(await res.user.getIdToken());
+      await enterWithEmailAndPassword(!isRegistered, email, password);
       console.log("Entered successfully!");
-
       navigate(Feed.path);
     } catch (error: any) {
       console.error("Authentication error: ", error);

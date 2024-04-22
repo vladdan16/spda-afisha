@@ -1,14 +1,19 @@
 import { AfishaContext } from "../contexts/Afisha";
 import { IAfisha } from "../services/Afisha";
+import { IPersonalAfisha } from "../services/PersonalAfisha";
 
 export function InjectAfisha({
-  afisha,
+  rawApi,
+  personal,
   children,
 }: {
-  afisha: IAfisha;
+  rawApi: IAfisha;
+  personal: IPersonalAfisha;
   children: React.ReactNode;
 }) {
   return (
-    <AfishaContext.Provider value={afisha}>{children}</AfishaContext.Provider>
+    <AfishaContext.Provider value={{ rawApi: rawApi, personal: personal }}>
+      {children}
+    </AfishaContext.Provider>
   );
 }

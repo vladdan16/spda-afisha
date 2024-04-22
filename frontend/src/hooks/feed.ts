@@ -1,6 +1,5 @@
 import { useContext, useEffect, useState } from "react";
 import { AfishaContext } from "../contexts/Afisha";
-import { ensureToken } from "../services/TokenStore";
 import { EnrolledEvent, IEvent } from "../structs/Event";
 import { ErrorModalContext } from "../contexts/ErrorModal";
 
@@ -12,12 +11,12 @@ export function useFeed() {
     undefined
   ); // EnrolledEvent[] = complete | undefined = loading | Error = error
 
+  let _enrollmentsIds: number[] = [];
+  let _rawEvents: IEvent[] = [];
+
   useEffect(() => {
     _fetchEvents();
   }, []);
-
-  let _enrollmentsIds: number[] = [];
-  let _rawEvents: IEvent[] = [];
 
   function _syncEventsProjection() {
     _setState(
@@ -35,9 +34,9 @@ export function useFeed() {
     try {
       _setState(undefined);
 
-      const events = await afisha.getEventsList();
+      const events = await afisha.personal.getMyEnrollments();
       _enrollmentsIds = events.map((e) => e.id);
-      _rawEvents = await afisha.getEventsList();
+      _rawEvents = await afisha.rawApi.getEventsList();
 
       _syncEventsProjection();
     } catch (e: any) {
@@ -48,12 +47,12 @@ export function useFeed() {
 
   async function toggleEventEnrollment(event_id: number) {
     try {
-      const accessToken = ensureToken();
-
       const wasEnrolled = _enrollmentsIds.includes(event_id);
 
-      const switchEnrollment = wasEnrolled ? afisha.unenroll : afisha.enroll;
-      await switchEnrollment(accessToken, event_id);
+      const switchEnrollment = wasEnrolled
+        ? afisha.personal.unenroll
+        : afisha.personal.enroll;
+      await switchEnrollment(event_id);
 
       if (wasEnrolled) {
         _enrollmentsIds = _enrollmentsIds.filter((id) => id !== event_id);
