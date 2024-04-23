@@ -5,6 +5,7 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { makeAuth } from "../firebase";
+import { CannotObtainAccessToken } from "../exceptions/authention";
 
 export async function enterWithEmailAndPassword(
   register: boolean,
@@ -27,7 +28,7 @@ export async function getToken() {
 
 export async function ensureToken() {
   const token = await getToken();
-  if (token === null) throw new Error("Cannot obtain access token");
+  if (token === null) throw new CannotObtainAccessToken();
   return token;
 }
 

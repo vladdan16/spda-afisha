@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 
-// check via fetching a generic data or null
-export function useCheck<T>(fetchData: () => Promise<T>) {
+export function useExecTrunk<T>(trunk: () => Promise<T>) {
   const [data, setData] = useState<undefined | T>(undefined);
 
   async function _check() {
     while (true) {
       try {
-        setData(await fetchData());
+        setData(await trunk());
         break;
       } catch (err) {
         console.error(err);

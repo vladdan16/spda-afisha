@@ -4,6 +4,7 @@ import axios, { AxiosInstance } from "axios";
 import { IEvent, IRawEvent } from "../structs/Event";
 import { configFromAccessToken } from "../utils/rest";
 import { delay } from "../utils/async";
+import { NotOnboarded } from "../exceptions/afisha";
 
 export interface IAfisha {
   getEventsList(): Promise<IEvent[]>;
@@ -22,51 +23,72 @@ export class RestAfisha implements IAfisha {
     });
   }
 
-  private convertEventDates(events: IRawEvent[]): IEvent[] {
+  static convertEventDates(events: IRawEvent[]): IEvent[] {
     return events.map((event) => ({
       ...event,
       start_at: new Date(event.start_at), // Convert string to Date object
     }));
   }
 
-  async getEventsList(): Promise<IEvent[]> {
-    const response = await this.axiosInstance.get<{ events: IRawEvent[] }>(
-      "/event/list"
-    );
-    return this.convertEventDates(response.data.events);
+  static async convertErrors<T>(func: () => Promise<T>): Promise<T> {
+    try {
+      return await func();
+    } catch (err: any) {
+      // NOTE: now considering any error as no onboarding
+      // TODO: distinguish exactly if the error is indicating no onboarding
+      console.log(err);
+      throw new NotOnboarded();
+    }
   }
 
-  async getMyEvents(accessToken: string): Promise<IEvent[]> {
-    const response = await this.axiosInstance.get<{ events: IRawEvent[] }>(
-      "/event/my_events",
-      configFromAccessToken(accessToken)
-    );
-    return this.convertEventDates(response.data.events);
+  getEventsList(): Promise<IEvent[]> {
+    return RestAfisha.convertErrors(async () => {
+      const response = await this.axiosInstance.get<{ events: IRawEvent[] }>(
+        "/event/list"
+      );
+      return RestAfisha.convertEventDates(response.data.events);
+    });
   }
 
-  async getMyEnrollments(accessToken: string): Promise<IEvent[]> {
-    const response = await this.axiosInstance.get<{ events: IRawEvent[] }>(
-      "/enroll/my_enrolls",
-      configFromAccessToken(accessToken)
-    );
-    return this.convertEventDates(response.data.events);
+  getMyEvents(accessToken: string): Promise<IEvent[]> {
+    return RestAfisha.convertErrors(async () => {
+      const response = await this.axiosInstance.get<{ events: IRawEvent[] }>(
+        "/event/my_events",
+        configFromAccessToken(accessToken)
+      );
+      return RestAfisha.convertEventDates(response.data.events);
+    });
   }
 
-  async enroll(accessToken: string, eventId: number): Promise<void> {
-    await this.axiosInstance.post(
-      "/enroll",
-      {
-        event_id: eventId,
-      },
-      configFromAccessToken(accessToken)
-    );
+  getMyEnrollments(accessToken: string): Promise<IEvent[]> {
+    return RestAfisha.convertErrors(async () => {
+      const response = await this.axiosInstance.get<{ events: IRawEvent[] }>(
+        "/enroll/my_enrolls",
+        configFromAccessToken(accessToken)
+      );
+      return RestAfisha.convertEventDates(response.data.events);
+    });
   }
 
-  async unenroll(accessToken: string, eventId: number): Promise<void> {
-    await this.axiosInstance.delete(
-      "/enroll",
-      configFromAccessToken(accessToken, { id: eventId })
-    );
+  enroll(accessToken: string, eventId: number): Promise<void> {
+    return RestAfisha.convertErrors(async () => {
+      await this.axiosInstance.post(
+        "/enroll",
+        {
+          event_id: eventId,
+        },
+        configFromAccessToken(accessToken)
+      );
+    });
+  }
+
+  unenroll(accessToken: string, eventId: number): Promise<void> {
+    return RestAfisha.convertErrors(async () => {
+      await this.axiosInstance.delete(
+        "/enroll",
+        configFromAccessToken(accessToken, { id: eventId })
+      );
+    });
   }
 }
 

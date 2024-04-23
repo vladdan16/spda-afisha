@@ -1,10 +1,12 @@
 import { Navigation } from "../components/Navigation";
-import { _ensureUserLoggedIn } from "../shared/loginState";
+import { useOnboardingCheck_Via_MyEnrollmentsAndMyEvents } from "../hooks/authentication";
+import { _ensureUserOnboarded } from "../shared/loginState";
 
 export const path = "/dashboard";
 
 export function Page() {
-  return _ensureUserLoggedIn({
+  return _ensureUserOnboarded({
+    useDataFetch: useOnboardingCheck_Via_MyEnrollmentsAndMyEvents,
     render: () => (
       <>
         <Navigation loggedIn={true} />
