@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { AfishaContext } from "../contexts/Afisha";
-import { EnrolledEvent, IEvent } from "../structs/Event";
+import { EnrolledEvent } from "../structs/Event";
 import { ErrorModalContext } from "../contexts/ErrorModal";
 import { NotOnboarded } from "../exceptions/afisha";
 import { CannotObtainAccessToken } from "../exceptions/authentication";
