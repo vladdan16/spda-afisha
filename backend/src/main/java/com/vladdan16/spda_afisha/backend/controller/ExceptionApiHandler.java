@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MissingRequestHeaderException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -94,10 +95,23 @@ public class ExceptionApiHandler {
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
   }
 
+  @ExceptionHandler(MissingServletRequestParameterException.class)
+  public ResponseEntity<ApiErrorResponse> handleMissingServletRequestParameterException(final MissingServletRequestParameterException e) {
+    LabelMarker marker = LabelMarker.of("error_code", () -> "400");
+    log.info(marker, e.getMessage());
+
+    ApiErrorResponse response = new ApiErrorResponse(
+        "Missing required request parameter(s)",
+        "400",
+        e.getClass().getSimpleName(),
+        e.getMessage());
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+  }
+
   @ExceptionHandler(Exception.class)
   public ResponseEntity<ApiErrorResponse> handleException(final Exception e) {
     LabelMarker marker = LabelMarker.of("error_code", () -> "500");
-    log.error(marker, e.getMessage());
+    log.error(marker, "Error name:{}, message: {}", e.getClass(), e.getMessage());
     List<String> errors = List.of(Arrays.toString(e.getStackTrace()));
     log.error(errors.toString());
 
