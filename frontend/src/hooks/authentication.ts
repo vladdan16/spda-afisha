@@ -1,6 +1,7 @@
 import { getToken } from "../services/Authenticator";
 import { CannotObtainAccessToken } from "../exceptions/authentication";
 import { useEffect, useState } from "react";
+import { delay } from "../utils/async";
 
 export function useAuthenticationCheck() {
   const [isLoggedIn, setIsLoggedIn] = useState<
@@ -20,7 +21,7 @@ export function useAuthenticationCheck() {
         }
         console.error(err);
         console.log("Retrying in 5 seconds...");
-        await new Promise((resolve) => setTimeout(resolve, 5000));
+        await delay(500);
       }
     }
   }

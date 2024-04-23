@@ -2,7 +2,6 @@
 
 import axios, { AxiosError, AxiosInstance } from "axios";
 import { IEvent, IRawEvent } from "../structs/Event";
-import { configFromAccessToken } from "../utils/rest";
 import { delay } from "../utils/async";
 import { NotOnboarded } from "../exceptions/afisha";
 
@@ -53,7 +52,11 @@ export class RestAfisha implements IAfisha {
           name,
           surname,
         },
-        configFromAccessToken(accessToken)
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
       );
     });
   }
@@ -71,7 +74,11 @@ export class RestAfisha implements IAfisha {
     return RestAfisha.convertErrors(async () => {
       const response = await this.axiosInstance.get<{ events: IRawEvent[] }>(
         "/event/my_events",
-        configFromAccessToken(accessToken)
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
       );
       return RestAfisha.convertEventDates(response.data.events);
     });
@@ -81,7 +88,11 @@ export class RestAfisha implements IAfisha {
     return RestAfisha.convertErrors(async () => {
       const response = await this.axiosInstance.get<{ enrolls: IRawEvent[] }>(
         "/enroll/my_enrolls",
-        configFromAccessToken(accessToken)
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
       );
       return RestAfisha.convertEventDates(response.data.enrolls);
     });
@@ -91,20 +102,25 @@ export class RestAfisha implements IAfisha {
     return RestAfisha.convertErrors(async () => {
       await this.axiosInstance.post(
         "/enroll",
+        {},
         {
-          event_id: eventId,
-        },
-        configFromAccessToken(accessToken)
+          params: { eventId },
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
       );
     });
   }
 
   unenroll(accessToken: string, eventId: number): Promise<void> {
     return RestAfisha.convertErrors(async () => {
-      await this.axiosInstance.delete(
-        "/enroll",
-        configFromAccessToken(accessToken, { id: eventId })
-      );
+      await this.axiosInstance.delete("/enroll", {
+        params: { eventId },
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
     });
   }
 }
