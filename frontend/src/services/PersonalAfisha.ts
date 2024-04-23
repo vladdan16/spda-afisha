@@ -6,6 +6,7 @@ import { ensureToken } from "./Authenticator";
 
 export interface IPersonalAfisha {
   getMyEnrollments(): Promise<IEvent[]>;
+  getMyEvents(): Promise<IEvent[]>;
   enroll(eventId: number): Promise<void>;
   unenroll(eventId: number): Promise<void>;
 }
@@ -21,6 +22,11 @@ export class FirebaseAuthPersonalAfisha implements IPersonalAfisha {
   async getMyEnrollments(): Promise<IEvent[]> {
     const token = await ensureToken();
     return await this.backend.getMyEnrollments(token);
+  }
+
+  async getMyEvents(): Promise<IEvent[]> {
+    const token = await ensureToken();
+    return await this.backend.getMyEvents(token);
   }
 
   async enroll(eventId: number): Promise<void> {

@@ -3,7 +3,7 @@ import { AfishaContext } from "../contexts/Afisha";
 import { EnrolledEvent, IEvent } from "../structs/Event";
 import { ErrorModalContext } from "../contexts/ErrorModal";
 
-export function useFeed() {
+export function useFeed(enrollments: IEvent[]) {
   const errorModal = useContext(ErrorModalContext)!;
   const afisha = useContext(AfishaContext)!;
 
@@ -11,7 +11,7 @@ export function useFeed() {
     undefined
   ); // EnrolledEvent[] = complete | undefined = loading | Error = error
 
-  let _enrollmentsIds: number[] = [];
+  let _enrollmentsIds: number[] = enrollments.map((e) => e.id);
   let _rawEvents: IEvent[] = [];
 
   useEffect(() => {
@@ -33,11 +33,7 @@ export function useFeed() {
   async function _fetchEvents() {
     try {
       _setState(undefined);
-
-      const events = await afisha.personal.getMyEnrollments();
-      _enrollmentsIds = events.map((e) => e.id);
       _rawEvents = await afisha.rawApi.getEventsList();
-
       _syncEventsProjection();
     } catch (e: any) {
       console.error("Fetching error: ", e);

@@ -1,12 +1,10 @@
 import { Navigation } from "../components/Navigation";
-import { ensureUserLoggedIn } from "../shared/loginState";
-import * as Entry from "../pages/EntryPage";
+import { _ensureUserLoggedIn } from "../shared/loginState";
 
 export const path = "/dashboard";
 
 export function Page() {
-  return ensureUserLoggedIn({
-    redirect: Entry.path,
+  return _ensureUserLoggedIn({
     render: () => (
       <>
         <Navigation loggedIn={true} />

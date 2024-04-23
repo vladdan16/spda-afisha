@@ -7,6 +7,7 @@ import { delay } from "../utils/async";
 
 export interface IAfisha {
   getEventsList(): Promise<IEvent[]>;
+  getMyEvents(accessToken: string): Promise<IEvent[]>;
   getMyEnrollments(accessToken: string): Promise<IEvent[]>;
   enroll(accessToken: string, eventId: number): Promise<void>;
   unenroll(accessToken: string, eventId: number): Promise<void>;
@@ -35,9 +36,17 @@ export class RestAfisha implements IAfisha {
     return this.convertEventDates(response.data.events);
   }
 
-  async getMyEnrollments(accessToken: string): Promise<IEvent[]> {
+  async getMyEvents(accessToken: string): Promise<IEvent[]> {
     const response = await this.axiosInstance.get<{ events: IRawEvent[] }>(
       "/event/my_events",
+      configFromAccessToken(accessToken)
+    );
+    return this.convertEventDates(response.data.events);
+  }
+
+  async getMyEnrollments(accessToken: string): Promise<IEvent[]> {
+    const response = await this.axiosInstance.get<{ events: IRawEvent[] }>(
+      "/enroll/my_enrolls",
       configFromAccessToken(accessToken)
     );
     return this.convertEventDates(response.data.events);
@@ -86,6 +95,10 @@ export class MockAfisha implements IAfisha {
         type: "CONFERENCE",
       },
     ]);
+  }
+
+  async getMyEvents(): Promise<IEvent[]> {
+    return [];
   }
 
   async getMyEnrollments(): Promise<IEvent[]> {

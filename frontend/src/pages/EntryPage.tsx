@@ -1,6 +1,5 @@
 import { useEntry } from "../hooks/entry";
-import { ensureUserNotLoggedIn } from "../shared/loginState";
-import * as Feed from "../pages/FeedPage";
+import { _ensureUserNotLoggedIn } from "../shared/loginState";
 import { Loading } from "../components/Loading";
 import { CenterH, CenterW } from "../components/Center";
 import { DefaultLayout } from "../components/DefaultLayout";
@@ -31,8 +30,7 @@ export function Page() {
     enter();
   };
 
-  return ensureUserNotLoggedIn({
-    redirect: Feed.path,
+  return _ensureUserNotLoggedIn({
     render: () => (
       <DefaultLayout loggedIn={false}>
         <CenterH>
