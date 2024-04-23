@@ -1,13 +1,13 @@
 package com.vladdan16.spda_afisha.backend.service.jpa;
 
+import com.vladdan16.spda_afisha.backend.domain.exceptions.NotAcceptableException;
+import com.vladdan16.spda_afisha.backend.domain.exceptions.NotFoundException;
 import com.vladdan16.spda_afisha.backend.domain.models.User;
 import com.vladdan16.spda_afisha.backend.domain.models.UserRole;
 import com.vladdan16.spda_afisha.backend.domain.repositories.UserRepository;
-import com.vladdan16.spda_afisha.backend.dto.responses.events.EventResponse;
 import com.vladdan16.spda_afisha.backend.dto.responses.users.UserResponse;
 import com.vladdan16.spda_afisha.backend.service.UserService;
 import jakarta.transaction.Transactional;
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,74 +18,68 @@ public class JpaUserService implements UserService {
   private final UserRepository userRepository;
 
   @Override
-  public UserResponse getUserByLogin(String login) {
-    final var user = userRepository.getUserByLogin(login);
+  public UserResponse getUserByUid(String uid) {
+    final var user = userRepository.getUserById(uid);
+    if (user == null) {
+      throw new NotFoundException("User not found");
+    }
     return new UserResponse(
-        user.getId(),
+        user.getEmail(),
         user.getName(),
-        user.getSurname(),
-        user.getLogin(),
-        user.getRole(),
-        user.getEvents()
-            .stream()
-            .map((event) -> new EventResponse(
-                event.getId(),
-                event.getName(),
-                event.getDescription(),
-                event.getStartAt(),
-                event.getNumberSeats(),
-                event.getType())
-            ).toList());
+        user.getSurname());
   }
 
   @Override
-  public void deleteUser(String id) {
-    userRepository.deleteById(id);
+  public void deleteUserByUid(String uid) {
+    final var user = userRepository.getUserById(uid);
+    if (user == null) {
+      throw new NotFoundException("User not found");
+    }
+    userRepository.deleteById(uid);
   }
 
   @Override
   public void createUser(
+      String uid,
+      String email,
       String name,
-      String surname,
-      String login,
-      String password,
-      UserRole role
+      String surname
   ) {
-    // TODO: save passwords using hash function
-    final var user = User.builder()
+    var user = userRepository.getUserById(uid);
+    if (user != null) {
+      throw new NotAcceptableException("User already exists");
+    }
+
+    user = User.builder()
+        .id(uid)
+        .email(email)
         .name(name)
         .surname(surname)
-        .login(login)
-        .password(password)
-        .role(role)
+        .role(UserRole.USER)
         .build();
     userRepository.save(user);
   }
 
   @Override
   public void updateUser(
-      @NotNull String id,
+      String uid,
+      String email,
       String name,
-      String surname,
-      String login,
-      String password,
-      UserRole role
+      String surname
   ) {
-    final var user = userRepository.getUserById(id);
+    final var user = userRepository.getUserById(uid);
+    if (user == null) {
+      throw new NotFoundException("User not found");
+    }
+
+    if (email != null) {
+      user.setEmail(email);
+    }
     if (name != null) {
       user.setName(name);
     }
     if (surname != null) {
       user.setSurname(surname);
-    }
-    if (login != null) {
-      user.setLogin(login);
-    }
-    if (password != null) {
-      user.setPassword(password);
-    }
-    if (role != null) {
-      user.setRole(role);
     }
   }
 }
