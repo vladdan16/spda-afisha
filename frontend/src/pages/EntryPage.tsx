@@ -1,5 +1,5 @@
 import { useEntry } from "../hooks/entry";
-import { _ensureUserNotLoggedIn } from "../shared/loginState";
+import { _ensureUserNotLoggedIn } from "../components/LoginState";
 import { Loading } from "../components/Loading";
 import { CenterH, CenterW } from "../components/Center";
 import { DefaultLayout } from "../components/DefaultLayout";

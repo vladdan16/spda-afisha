@@ -2,12 +2,12 @@ import { Navigate } from "react-router-dom";
 import * as Feed from "../pages/FeedPage";
 import * as Entry from "../pages/EntryPage";
 import * as Onboard from "../pages/OnboardPage";
-import { CenterHLoading } from "../components/CenterHLoading";
+import { CenterHLoading } from "./CenterHLoading";
 import { useAuthenticationCheck } from "../hooks/authentication";
-import { CannotObtainAccessToken } from "../exceptions/authention";
+import { CannotObtainAccessToken } from "../exceptions/authentication";
 import { NotOnboarded } from "../exceptions/afisha";
 
-function _ensureNotLoadingAndTokenOk<T>({
+function _loadingAndTokenOk<T>({
   useDataFetch,
   render,
 }: {
@@ -31,17 +31,23 @@ function _ensureNotLoadingAndTokenOk<T>({
   return render(data);
 }
 
-export function _ensureUserNotLoggedIn({
+function _ensureLoginState({
+  expectedToBeLoggedIn,
   render,
 }: {
+  expectedToBeLoggedIn: boolean;
   render: () => JSX.Element;
 }) {
-  return _ensureNotLoadingAndTokenOk({
+  return _loadingAndTokenOk({
     useDataFetch: useAuthenticationCheck,
-    render: (data: boolean) => {
-      const isLoggedIn = data;
-      if (isLoggedIn) {
-        return <Navigate to={Feed.path} replace />;
+    render: (isLoggedIn: boolean) => {
+      if (expectedToBeLoggedIn !== isLoggedIn) {
+        return (
+          <Navigate
+            to={expectedToBeLoggedIn ? Entry.path : Feed.path}
+            replace
+          />
+        );
       }
 
       return render();
@@ -49,14 +55,26 @@ export function _ensureUserNotLoggedIn({
   });
 }
 
+export function _ensureUserLoggedIn({ render }: { render: () => JSX.Element }) {
+  return _ensureLoginState({ expectedToBeLoggedIn: true, render });
+}
+
+export function _ensureUserNotLoggedIn({
+  render,
+}: {
+  render: () => JSX.Element;
+}) {
+  return _ensureLoginState({ expectedToBeLoggedIn: false, render });
+}
+
 export function _ensureUserOnboarded<T>({
-  useDataFetch, // use useOnboardingCheck_Via_* from ../hooks/authentication.ts
+  useDataFetch,
   render,
 }: {
   useDataFetch: () => T | CannotObtainAccessToken | NotOnboarded | undefined;
   render: (data: T) => JSX.Element;
 }) {
-  return _ensureNotLoadingAndTokenOk<T | NotOnboarded>({
+  return _loadingAndTokenOk<T | NotOnboarded>({
     useDataFetch: useDataFetch,
     render: (data: T | NotOnboarded) => {
       if (data instanceof NotOnboarded) {

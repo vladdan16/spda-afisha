@@ -5,7 +5,7 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { makeAuth } from "../firebase";
-import { CannotObtainAccessToken } from "../exceptions/authention";
+import { CannotObtainAccessToken } from "../exceptions/authentication";
 
 export async function enterWithEmailAndPassword(
   register: boolean,

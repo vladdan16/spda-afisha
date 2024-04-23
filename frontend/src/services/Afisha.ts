@@ -10,6 +10,7 @@ export interface IAfisha {
   getEventsList(): Promise<IEvent[]>;
   getMyEvents(accessToken: string): Promise<IEvent[]>;
   getMyEnrollments(accessToken: string): Promise<IEvent[]>;
+  onboard(accessToken: string, name: string, surname: string): Promise<void>;
   enroll(accessToken: string, eventId: number): Promise<void>;
   unenroll(accessToken: string, eventId: number): Promise<void>;
 }
@@ -44,6 +45,19 @@ export class RestAfisha implements IAfisha {
     }
   }
 
+  onboard(accessToken: string, name: string, surname: string): Promise<void> {
+    return RestAfisha.convertErrors(async () => {
+      await this.axiosInstance.post(
+        "/user",
+        {
+          name,
+          surname,
+        },
+        configFromAccessToken(accessToken)
+      );
+    });
+  }
+
   getEventsList(): Promise<IEvent[]> {
     return RestAfisha.convertErrors(async () => {
       const response = await this.axiosInstance.get<{ events: IRawEvent[] }>(
@@ -65,11 +79,11 @@ export class RestAfisha implements IAfisha {
 
   getMyEnrollments(accessToken: string): Promise<IEvent[]> {
     return RestAfisha.convertErrors(async () => {
-      const response = await this.axiosInstance.get<{ events: IRawEvent[] }>(
+      const response = await this.axiosInstance.get<{ enrolls: IRawEvent[] }>(
         "/enroll/my_enrolls",
         configFromAccessToken(accessToken)
       );
-      return RestAfisha.convertEventDates(response.data.events);
+      return RestAfisha.convertEventDates(response.data.enrolls);
     });
   }
 
@@ -121,6 +135,8 @@ export class MockAfisha implements IAfisha {
       },
     ]);
   }
+
+  async onboard(): Promise<void> {}
 
   async getMyEvents(): Promise<IEvent[]> {
     return [];

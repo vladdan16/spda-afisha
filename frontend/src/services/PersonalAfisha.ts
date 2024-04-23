@@ -5,6 +5,7 @@ import { IAfisha } from "./Afisha";
 import { ensureToken } from "./Authenticator";
 
 export interface IPersonalAfisha {
+  onboard(name: string, surname: string): Promise<void>;
   getMyEnrollments(): Promise<IEvent[]>;
   getMyEvents(): Promise<IEvent[]>;
   enroll(eventId: number): Promise<void>;
@@ -17,6 +18,11 @@ export class FirebaseAuthPersonalAfisha implements IPersonalAfisha {
 
   constructor(backend: IAfisha) {
     this.backend = backend;
+  }
+
+  async onboard(name: string, surname: string): Promise<void> {
+    const token = await ensureToken();
+    return await this.backend.onboard(token, name, surname);
   }
 
   async getMyEnrollments(): Promise<IEvent[]> {
