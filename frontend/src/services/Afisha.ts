@@ -134,6 +134,8 @@ export class MockAfisha implements IAfisha {
         description: "Event Description",
         start_at: new Date(),
         type: "MEETUP",
+        available_seats: 10,
+        number_seats: 15,
       },
       {
         id: 2,
@@ -141,6 +143,8 @@ export class MockAfisha implements IAfisha {
         description: "Event Description",
         start_at: new Date(),
         type: "MEETUP",
+        available_seats: 10,
+        number_seats: 15,
       },
       {
         id: 3,
@@ -148,6 +152,8 @@ export class MockAfisha implements IAfisha {
         description: "Event Description",
         start_at: new Date(),
         type: "CONFERENCE",
+        available_seats: 10,
+        number_seats: 15,
       },
     ]);
   }

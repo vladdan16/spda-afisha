@@ -10,11 +10,15 @@ const formatter = new Intl.DateTimeFormat("ru-RU", options);
 export function Poster({
   title,
   time,
+  number_seats,
+  avaliable_seats,
   isEnrolled,
   toggle,
 }: {
   title: string;
   time: Date;
+  number_seats: number;
+  avaliable_seats: number;
   isEnrolled: boolean;
   toggle: () => void;
 }) {
@@ -22,12 +26,18 @@ export function Poster({
     <div className="w-[365px] h-64 relative">
       <div className="w-[342px] h-[191px] left-0 top-0 absolute bg-blue-800 rounded-[20px]">
         <button
-          className="w-[130px] h-[34px] absolute right-0 bottom-0 mr-3 mb-3 bg-amber-500 rounded-[10px]"
+          className="w-[130px] absolute right-0 bottom-0 mr-3 mb-3 p-1 bg-amber-500 rounded-[10px]"
+          title={isEnrolled ? "Отписаться" : "Записаться"}
           onClick={toggle}
         >
-          <div className="left-[22px] top-[22px] text-white text-base font-bold font-Montserrat">
+          <div className="text-white text-base font-bold font-Montserrat">
             {isEnrolled ? "Вы записаны" : "Записаться"}
           </div>
+          {!isEnrolled && (
+            <div className="text-white text-[12px] font-normal font-Inter">
+              {"Доступно: " + avaliable_seats + "/" + number_seats}
+            </div>
+          )}
         </button>
       </div>
       <div className="w-[360px] h-[31px] left-[5px] top-[202px] absolute text-black text-2xl font-bold font-Montserrat">

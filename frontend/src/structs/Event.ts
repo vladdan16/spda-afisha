@@ -4,6 +4,8 @@ export interface IRawEvent {
   description: string;
   start_at: Date | string;
   type: "MEETUP" | "CONFERENCE" | "CONCERT" | "OTHER";
+  available_seats: number;
+  number_seats: number;
 }
 
 export interface IEvent {
@@ -12,9 +14,9 @@ export interface IEvent {
   description: string;
   start_at: Date;
   type: "MEETUP" | "CONFERENCE" | "CONCERT" | "OTHER";
+  available_seats: number;
+  number_seats: number;
   // place: string;
-  // available_seats: number;
-  // number_seats: number;
   // images: string[];
 }
 
@@ -24,6 +26,8 @@ export class EnrolledEvent implements IEvent {
   description: string;
   start_at: Date;
   type: "MEETUP" | "CONFERENCE" | "CONCERT" | "OTHER";
+  available_seats: number;
+  number_seats: number;
 
   isEnrolled: boolean;
 
@@ -33,6 +37,8 @@ export class EnrolledEvent implements IEvent {
     this.description = event.description;
     this.start_at = event.start_at;
     this.type = event.type;
+    this.available_seats = event.available_seats;
+    this.number_seats = event.number_seats;
     this.isEnrolled = isEnrolled;
   }
 }
