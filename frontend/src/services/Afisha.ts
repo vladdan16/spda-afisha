@@ -1,6 +1,6 @@
 // tags: [SERVICE, SERVICE_INTERFACE, SERVICE_IMPLs]
 
-import axios, { AxiosInstance } from "axios";
+import axios, { AxiosError, AxiosInstance } from "axios";
 import { IEvent, IRawEvent } from "../structs/Event";
 import { configFromAccessToken } from "../utils/rest";
 import { delay } from "../utils/async";
@@ -34,10 +34,13 @@ export class RestAfisha implements IAfisha {
     try {
       return await func();
     } catch (err: any) {
-      // NOTE: now considering any error as no onboarding
-      // TODO: distinguish exactly if the error is indicating no onboarding
-      console.log(err);
-      throw new NotOnboarded();
+      if (
+        err instanceof AxiosError &&
+        err.response?.data.exceptionName === "NotFoundException"
+      ) {
+        throw new NotOnboarded();
+      }
+      throw err;
     }
   }
 
