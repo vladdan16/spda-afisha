@@ -34,9 +34,10 @@ export class RestAfisha implements IAfisha {
     try {
       return await func();
     } catch (err: any) {
+      console.log(err);
       if (
         err instanceof AxiosError &&
-        err.response?.data.exceptionName === "NotFoundException"
+        err.response?.data.exceptionMessage === "User not found"
       ) {
         throw new NotOnboarded();
       }
