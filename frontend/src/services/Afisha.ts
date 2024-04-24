@@ -1,17 +1,30 @@
 // tags: [SERVICE, SERVICE_INTERFACE, SERVICE_IMPLs]
 
 import axios, { AxiosError, AxiosInstance } from "axios";
-import { IEvent, IRawEvent } from "../structs/Event";
+import { IEvent, IEventData } from "../structs/Event";
 import { delay } from "../utils/async";
 import { NotOnboarded } from "../exceptions/afisha";
 
 export interface IAfisha {
   getEventsList(): Promise<IEvent[]>;
+  createEvent(accessToken: string, event: IEventData): Promise<{ id: number }>;
   getMyEvents(accessToken: string): Promise<IEvent[]>;
   getMyEnrollments(accessToken: string): Promise<IEvent[]>;
   onboard(accessToken: string, name: string, surname: string): Promise<void>;
   enroll(accessToken: string, eventId: number): Promise<void>;
   unenroll(accessToken: string, eventId: number): Promise<void>;
+}
+
+interface IEventModel {
+  id: number;
+  name: string;
+  description: string;
+  start_at: Date | string;
+  type: "MEETUP" | "CONFERENCE" | "CONCERT" | "OTHER";
+  available_seats: number;
+  number_seats: number;
+  place: string | null;
+  images: string[];
 }
 
 export class RestAfisha implements IAfisha {
@@ -23,7 +36,7 @@ export class RestAfisha implements IAfisha {
     });
   }
 
-  static convertEventDates(events: IRawEvent[]): IEvent[] {
+  static convertEventDates(events: IEventModel[]): IEvent[] {
     return events.map((event) => ({
       ...event,
       start_at: new Date(event.start_at), // Convert string to Date object
@@ -63,16 +76,30 @@ export class RestAfisha implements IAfisha {
 
   getEventsList(): Promise<IEvent[]> {
     return RestAfisha.convertErrors(async () => {
-      const response = await this.axiosInstance.get<{ events: IRawEvent[] }>(
+      const response = await this.axiosInstance.get<{ events: IEventModel[] }>(
         "/event/list"
       );
       return RestAfisha.convertEventDates(response.data.events);
     });
   }
 
+  async createEvent(
+    accessToken: string,
+    event: IEventData
+  ): Promise<{ id: number }> {
+    return RestAfisha.convertErrors(async () => {
+      const response = await this.axiosInstance.post<number>("/event", event, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      return { id: response.data };
+    });
+  }
+
   getMyEvents(accessToken: string): Promise<IEvent[]> {
     return RestAfisha.convertErrors(async () => {
-      const response = await this.axiosInstance.get<{ events: IRawEvent[] }>(
+      const response = await this.axiosInstance.get<{ events: IEventModel[] }>(
         "/event/my_events",
         {
           headers: {
@@ -86,7 +113,7 @@ export class RestAfisha implements IAfisha {
 
   getMyEnrollments(accessToken: string): Promise<IEvent[]> {
     return RestAfisha.convertErrors(async () => {
-      const response = await this.axiosInstance.get<{ enrolls: IRawEvent[] }>(
+      const response = await this.axiosInstance.get<{ enrolls: IEventModel[] }>(
         "/enroll/my_enrolls",
         {
           headers: {
@@ -165,6 +192,10 @@ export class MockAfisha implements IAfisha {
   }
 
   async onboard(): Promise<void> {}
+
+  async createEvent(): Promise<{ id: number }> {
+    throw new Error("Method not implemented.");
+  }
 
   async getMyEvents(): Promise<IEvent[]> {
     return [];

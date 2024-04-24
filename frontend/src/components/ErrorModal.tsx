@@ -1,15 +1,11 @@
-import { useState } from "react";
 import { Modal } from "./Modal";
 import { ErrorModalContext } from "../contexts/ErrorModal";
 import { ErrorMsg } from "./ErrorMsg";
+import { useErrorModal } from "../hooks/errorModal";
 
 export function ErrorModal({ children }: { children: React.ReactNode }) {
-  const [msg, setModal] = useState<string | undefined>(undefined);
-  const open = (newMsg: string) => setModal(newMsg);
-  const close = () => setModal(undefined);
-
-  const show = msg !== undefined;
-
+  const { msg, open, close } = useErrorModal();
+  const show = msg !== null;
   return (
     <ErrorModalContext.Provider value={{ open }}>
       {show && (

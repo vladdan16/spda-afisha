@@ -1,24 +1,15 @@
-export interface IRawEvent {
-  id: number;
-  name: string;
-  description: string;
-  start_at: Date | string;
-  type: "MEETUP" | "CONFERENCE" | "CONCERT" | "OTHER";
-  available_seats: number;
-  number_seats: number;
-  place: string | null;
-  images: string[];
-}
-
-export interface IEvent {
-  id: number;
+export interface IEventData {
   name: string;
   description: string;
   start_at: Date;
   type: "MEETUP" | "CONFERENCE" | "CONCERT" | "OTHER";
-  available_seats: number;
   number_seats: number;
   place: string | null;
+}
+
+export interface IEvent extends IEventData {
+  id: number;
+  available_seats: number;
   images: string[];
 }
 

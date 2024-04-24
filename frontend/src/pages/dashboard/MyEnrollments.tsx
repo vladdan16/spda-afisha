@@ -1,7 +1,7 @@
 import { DashboardLayout } from "../../components/DashboardLayout";
 import { _ensureUserOnboarded } from "../../components/LoginState";
 import { GeneralPoster } from "../../components/Poster";
-import { useMyEnrollmentsDashboard } from "../../hooks/dashboard/my_enrollments";
+import { useMyEnrollmentsDashboard } from "../../hooks/dashboard/myEnrollments";
 import { IEvent } from "../../structs/Event";
 
 export const path = "/dashboard/my_enrollments";
