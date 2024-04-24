@@ -4,7 +4,6 @@ import { EnrolledEvent } from "../structs/Event";
 import { ErrorModalContext } from "../contexts/ErrorModal";
 import { NotOnboarded } from "../exceptions/afisha";
 import { CannotObtainAccessToken } from "../exceptions/authentication";
-import { delay } from "../utils/async";
 
 export function useFeed() {
   const errorModal = useContext(ErrorModalContext)!;
@@ -19,29 +18,25 @@ export function useFeed() {
   }, []);
 
   async function _fetchEvents() {
-    while (true) {
-      try {
-        const enrollments = await afisha.personal.getMyEnrollments();
-        const _enrollmentsIds = enrollments.map((e) => e.id);
-        const _rawEvents = await afisha.rawApi.getEventsList();
-        _setState(
-          _rawEvents.map(
-            (e) =>
-              new EnrolledEvent({
-                event: e,
-                isEnrolled: _enrollmentsIds.includes(e.id),
-              })
-          )
-        );
-        break;
-      } catch (e: any) {
-        if (e instanceof NotOnboarded || e instanceof CannotObtainAccessToken) {
-          _setState(e);
-        }
-        console.error(e);
-        console.log("Retrying in 5 seconds...");
-        await delay(5000);
+    try {
+      const enrollments = await afisha.personal.getMyEnrollments();
+      const _enrollmentsIds = enrollments.map((e) => e.id);
+      const _rawEvents = await afisha.rawApi.getEventsList();
+      _setState(
+        _rawEvents.map(
+          (e) =>
+            new EnrolledEvent({
+              event: e,
+              isEnrolled: _enrollmentsIds.includes(e.id),
+            })
+        )
+      );
+    } catch (e: any) {
+      if (e instanceof NotOnboarded || e instanceof CannotObtainAccessToken) {
+        _setState(e);
       }
+      console.error(e);
+      errorModal.open(e.message);
     }
   }
 
@@ -61,6 +56,7 @@ export function useFeed() {
       await switchEnrollment(event_id);
 
       event.isEnrolled = !wasEnrolled;
+      event.available_seats += wasEnrolled ? 1 : -1;
       _setState([...state]);
     } catch (e: any) {
       console.error("Enrollment toggling error: ", e);
@@ -72,5 +68,5 @@ export function useFeed() {
     return state;
   }
 
-  return { state, toggleEventEnrollment };
+  return { events: state, toggleEventEnrollment };
 }

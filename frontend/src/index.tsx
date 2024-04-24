@@ -6,7 +6,7 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { ErrorModal } from "./components/ErrorModal";
 
 import * as Entry from "./pages/EntryPage";
-import * as Dashboard from "./pages/DashboardPage";
+import * as MyEnrollmentsDashboard from "./pages/dashboard/MyEnrollments";
 import * as Feed from "./pages/FeedPage";
 import * as Onboard from "./pages/OnboardPage";
 
@@ -28,7 +28,10 @@ root.render(
       <ErrorModal>
         <Routes>
           <Route path={Entry.path} element={<Entry.Page />} />
-          <Route path={Dashboard.path} element={<Dashboard.Page />} />
+          <Route
+            path={MyEnrollmentsDashboard.path}
+            element={<MyEnrollmentsDashboard.Page />}
+          />
           <Route path={Feed.path} element={<Feed.Page />} />
           <Route path={Onboard.path} element={<Onboard.Page />} />
           <Route path="*" element={<Navigate to={Feed.path} replace />} />
