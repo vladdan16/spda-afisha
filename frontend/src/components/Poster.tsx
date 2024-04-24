@@ -28,7 +28,7 @@ export function EnrollPoster({
   toggle: () => void;
 }) {
   return (
-    <div className="w-[365px] h-64 relative">
+    <div className="w-[390px] h-64 relative">
       <div className="w-[342px] h-[191px] left-0 top-0 absolute bg-blue-800 rounded-[20px]">
         <button
           className="w-[130px] absolute right-0 bottom-0 mr-3 mb-3 p-1 bg-amber-500 rounded-[10px]"
@@ -46,10 +46,11 @@ export function EnrollPoster({
         </button>
       </div>
       <div className="w-[360px] h-[31px] left-[5px] top-[202px] absolute text-black text-2xl font-bold font-Montserrat">
-        {title + (place != null ? ", " + place : "")}
+        {title}
       </div>
       <div className="left-[5px] top-[236px] absolute text-zinc-800 text-base font-semibold font-Montserrat">
-        {EnrollPoster_formatter.format(time)}
+        {EnrollPoster_formatter.format(time) +
+          (place != null ? ", " + place : "")}
       </div>
     </div>
   );

@@ -22,7 +22,7 @@ function _render({
 }) {
   return (
     <DashboardLayout current="enrollments">
-      <div className="flex flex-row items-center">
+      <div className="flex flex-row items-center space-x-10">
         {events.map((event) => (
           <GeneralPoster
             title={event.name}

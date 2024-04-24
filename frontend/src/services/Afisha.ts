@@ -171,7 +171,7 @@ export class MockAfisha implements IAfisha {
   }
 
   async getMyEnrollments(): Promise<IEvent[]> {
-    return [];
+    return await this.getEventsList();
   }
 
   async enroll(): Promise<void> {
