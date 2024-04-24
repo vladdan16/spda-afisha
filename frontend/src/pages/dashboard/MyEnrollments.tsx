@@ -28,6 +28,7 @@ function _render({
             title={event.name}
             time={event.start_at}
             del={() => unenroll(event.id)}
+            place={event.place}
             key={event.id}
           />
         ))}

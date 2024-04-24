@@ -136,6 +136,8 @@ export class MockAfisha implements IAfisha {
         type: "MEETUP",
         available_seats: 10,
         number_seats: 15,
+        place: "Технопарк, ауд. 122",
+        images: [],
       },
       {
         id: 2,
@@ -145,6 +147,8 @@ export class MockAfisha implements IAfisha {
         type: "MEETUP",
         available_seats: 10,
         number_seats: 15,
+        place: "Технопарк, ауд. 122",
+        images: [],
       },
       {
         id: 3,
@@ -154,6 +158,8 @@ export class MockAfisha implements IAfisha {
         type: "CONFERENCE",
         available_seats: 10,
         number_seats: 15,
+        place: "Технопарк, ауд. 122",
+        images: [],
       },
     ]);
   }

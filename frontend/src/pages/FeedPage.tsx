@@ -37,6 +37,7 @@ function _render({
                   time={event.start_at}
                   avaliable_seats={event.available_seats}
                   number_seats={event.number_seats}
+                  place={event.place}
                   isEnrolled={event.isEnrolled}
                   toggle={() => toggleEventEnrollment(event.id)}
                   key={event.id}
