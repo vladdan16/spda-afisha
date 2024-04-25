@@ -86,7 +86,7 @@ export class RestAfisha implements IAfisha {
 
   deleteEvent(accessToken: string, eventId: number): Promise<void> {
     return RestAfisha.convertErrors(async () => {
-      await this.axiosInstance.post("/event/" + eventId, {
+      await this.axiosInstance.delete("/event/" + eventId, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
