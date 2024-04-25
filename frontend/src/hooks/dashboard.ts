@@ -5,10 +5,12 @@ import { AfishaContext } from "../contexts/Afisha";
 import { IEvent } from "../structs/Event";
 import { CannotObtainAccessToken } from "../exceptions/authentication";
 import { NotOnboarded } from "../exceptions/afisha";
+import { ParticipantsModalContext } from "../contexts/ParticipantsModal";
 
 export function useDashboard() {
   const errorModal = useContext(ErrorModalContext)!;
   const eventCreationModal = useContext(EventCreationModalContext)!;
+  const participantsModal = useContext(ParticipantsModalContext)!;
   const { personal } = useContext(AfishaContext)!;
 
   const [state, _setState] = useState<
@@ -54,17 +56,17 @@ export function useDashboard() {
     });
   }
 
-  async function deleteEvent(event_id: number) {
+  async function deleteEvent(eventId: number) {
     if (state instanceof Error || state === undefined) {
       return;
     }
 
     try {
-      await personal.deleteEvent(event_id);
+      await personal.deleteEvent(eventId);
       _setState({
         ...state,
-        enrollments: state.createdEvents.filter((e) => e.id !== event_id),
-        createdEvents: state.createdEvents.filter((e) => e.id !== event_id),
+        enrollments: state.createdEvents.filter((e) => e.id !== eventId),
+        createdEvents: state.createdEvents.filter((e) => e.id !== eventId),
       });
     } catch (e: any) {
       console.error(e);
@@ -72,16 +74,32 @@ export function useDashboard() {
     }
   }
 
-  async function unenroll(event_id: number) {
+  function showEventParticipants(eventId: number) {
+    if (state instanceof Error || state === undefined) {
+      return;
+    }
+    const event = state.createdEvents.find((e) => e.id === eventId)!;
+    // TODO: method for getting the participants
+    participantsModal.open(event.name, event.start_at, ["Name Secondname"]);
+  }
+
+  function editEvent(eventId: number) {
+    if (state instanceof Error || state === undefined) {
+      return;
+    }
+    // TODO: popup event editor modal
+  }
+
+  async function unenroll(eventId: number) {
     if (state instanceof Error || state === undefined) {
       return;
     }
 
     try {
-      await personal.unenroll(event_id);
+      await personal.unenroll(eventId);
       _setState({
         ...state,
-        enrollments: state.enrollments.filter((e) => e.id !== event_id),
+        enrollments: state.enrollments.filter((e) => e.id !== eventId),
       });
     } catch (e: any) {
       console.error("Enrollment toggling error: ", e);
@@ -103,6 +121,8 @@ export function useDashboard() {
   return state.chosen === "events"
     ? {
         createdEvents: state.createdEvents,
+        showEventParticipants,
+        editEvent,
         createEvent,
         deleteEvent,
         chosen: state.chosen,

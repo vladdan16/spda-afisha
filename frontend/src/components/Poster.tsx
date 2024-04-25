@@ -93,7 +93,7 @@ export function GeneralPoster({
           {GeneralPoster_formatter.format(time)}
         </div>
       </div>
-      <div className="bg-blue-800 h-[211px]"></div>
+      <div className="bg-blue-800 h-[211px]" />
       <div className="flex flex-grow">
         <div className="text-black text-base font-bold font-Montserrat px-6 py-3 w-full">
           {title}
@@ -111,7 +111,63 @@ export function GeneralPoster({
           </div>
         </div>
         <button onClick={del}>
-          <img alt="delete" className="w-10 h-10" src="/Delete.png" />
+          <img alt="delete" src="/Delete.png" />
+        </button>
+      </div>
+    </div>
+  );
+}
+
+export function GeneralPoster2({
+  title,
+  place,
+  time,
+  edit,
+  participants,
+  del,
+}: {
+  title: string;
+  place: string | null;
+  time: Date;
+  edit: () => void;
+  participants: () => void;
+  del: () => void;
+}) {
+  return (
+    <div className="w-[280px] h-[410px] bg-neutral-200 rounded-[20px] flex flex-col">
+      <div className="flex items-center justify-between p-2">
+        <button onClick={participants} className="flex items-center">
+          <img alt="people" src="/People.png" />
+          <div className="text-blue-800 text-base font-extrabold font-Montserrat ml-1">
+            Список участников
+          </div>
+        </button>
+        <button onClick={edit}>
+          <img alt="edit" src="/Gear.png" />
+        </button>
+      </div>
+      <div className="bg-blue-800 h-[211px]" />
+      <div className="flex flex-grow flex-col px-6">
+        <div className="text-black text-base font-bold font-Montserrat pt-3 w-full">
+          {title}
+        </div>
+        <div className="text-black text-base font-semibold font-Montserrat">
+          {GeneralPoster_formatter.format(time)}
+        </div>
+      </div>
+      <div className="flex justify-between px-3 mb-4 flex-shrink">
+        <div className="flex items-center flex-shrink">
+          <img
+            src="/PlaceMarker.png"
+            alt="place"
+            className="w-[27.12px] h-[30.78px]"
+          />
+          <div className="text-black text-base font-semibold font-Montserrat ml-2">
+            {place || "Место не указано"}
+          </div>
+        </div>
+        <button onClick={del}>
+          <img alt="delete" src="/Delete.png" />
         </button>
       </div>
     </div>

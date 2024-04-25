@@ -19,6 +19,8 @@ function _render(
     | {
         chosen: "events";
         createdEvents: IEvent[];
+        editEvent: (eventId: number) => void;
+        showEventParticipants: (eventId: number) => void;
         createEvent: () => Promise<void>;
         deleteEvent: (event_id: number) => Promise<void>;
         choose: (chosen: "enrollments" | "events") => void;
@@ -37,6 +39,8 @@ function _render(
           events={state.createdEvents}
           createEvent={state.createEvent}
           deleteEvent={state.deleteEvent}
+          showEventParticipants={state.showEventParticipants}
+          editEvent={state.editEvent}
         />
       ) : (
         <MyEnrollmentsDashboard
