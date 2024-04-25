@@ -4,8 +4,6 @@ import { PageLayout } from "./PageLayout";
 import * as MyEnrollmentsDashboard from "../pages/dashboard/MyEnrollments";
 import * as MyEventsDashboard from "../pages/dashboard/MyEvents";
 
-import { EventCreationModal } from "./EventCreationModal";
-
 export function DashboardNavButton({
   link,
   current,
@@ -20,8 +18,8 @@ export function DashboardNavButton({
   body = (
     <button
       className={`h-[60px] px-8 bg-${
-        current ? "stone-300" : "neutral-200"
-      } rounded-[20px] text-black text-[27px] font-bold font-Montserrat mt-6 mb-10`}
+        current ? "neutral-200" : ""
+      } rounded-[20px] text-black text-[27px] font-bold font-Montserrat mt-6 mb-10 mr-8`}
     >
       {children}
     </button>
