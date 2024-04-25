@@ -14,12 +14,12 @@ export function useCreateEventModal() {
   } | null>(null);
 
   function open() {
-    if (state !== undefined)
+    if (state !== null)
       throw new Error(
         "Trying to open event creation modal when it is already open"
       );
     return new Promise<IEvent | null>((resolve) => {
-      console.assert(state === undefined);
+      console.assert(state === null);
       setState({
         data: {
           name: "",

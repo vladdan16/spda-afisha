@@ -8,6 +8,7 @@ import { NotOnboarded } from "../exceptions/afisha";
 export interface IAfisha {
   getEventsList(): Promise<IEvent[]>;
   createEvent(accessToken: string, event: IEventData): Promise<{ id: number }>;
+  deleteEvent(accessToken: string, eventId: number): Promise<void>;
   getMyEvents(accessToken: string): Promise<IEvent[]>;
   getMyEnrollments(accessToken: string): Promise<IEvent[]>;
   onboard(accessToken: string, name: string, surname: string): Promise<void>;
@@ -83,10 +84,17 @@ export class RestAfisha implements IAfisha {
     });
   }
 
-  async createEvent(
-    accessToken: string,
-    event: IEventData
-  ): Promise<{ id: number }> {
+  deleteEvent(accessToken: string, eventId: number): Promise<void> {
+    return RestAfisha.convertErrors(async () => {
+      await this.axiosInstance.post("/event/" + eventId, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+    });
+  }
+
+  createEvent(accessToken: string, event: IEventData): Promise<{ id: number }> {
     return RestAfisha.convertErrors(async () => {
       const response = await this.axiosInstance.post<number>("/event", event, {
         headers: {
@@ -193,12 +201,17 @@ export class MockAfisha implements IAfisha {
 
   async onboard(): Promise<void> {}
 
+  async deleteEvent(): Promise<void> {
+    throw new Error("Method not implemented.");
+  }
+
   async createEvent(): Promise<{ id: number }> {
+    await delay([], 1000);
     throw new Error("Method not implemented.");
   }
 
   async getMyEvents(): Promise<IEvent[]> {
-    return [];
+    return await delay([]);
   }
 
   async getMyEnrollments(): Promise<IEvent[]> {

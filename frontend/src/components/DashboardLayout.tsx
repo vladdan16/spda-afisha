@@ -2,6 +2,8 @@ import { Link } from "react-router-dom";
 import { PageLayout } from "./PageLayout";
 
 import * as MyEnrollmentsDashboard from "../pages/dashboard/MyEnrollments";
+import * as MyEventsDashboard from "../pages/dashboard/MyEvents";
+
 import { EventCreationModal } from "./EventCreationModal";
 
 export function DashboardNavButton({
@@ -36,22 +38,26 @@ export function DashboardLayout({
   current,
   children,
 }: {
-  current: "enrollments";
+  current: "enrollments" | "events";
   children: React.ReactNode;
 }) {
   return (
-    <EventCreationModal>
-      <PageLayout title={"Мои Ивенты"}>
-        <div className="flex flex-row items-left">
-          <DashboardNavButton
-            link={MyEnrollmentsDashboard.path}
-            current={current === "enrollments"}
-          >
-            Мои записи
-          </DashboardNavButton>
-        </div>
-        {children}
-      </PageLayout>
-    </EventCreationModal>
+    <PageLayout title={"Мои Ивенты"}>
+      <div className="flex flex-row items-left">
+        <DashboardNavButton
+          link={MyEnrollmentsDashboard.path}
+          current={current === "enrollments"}
+        >
+          Мои записи
+        </DashboardNavButton>
+        <DashboardNavButton
+          link={MyEventsDashboard.path}
+          current={current === "events"}
+        >
+          Созданные ивенты
+        </DashboardNavButton>
+      </div>
+      {children}
+    </PageLayout>
   );
 }

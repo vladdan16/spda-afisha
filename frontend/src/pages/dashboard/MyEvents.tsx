@@ -1,33 +1,37 @@
+import { CreateNewEventButton } from "../../components/CreateNewEventButton";
 import { DashboardLayout } from "../../components/DashboardLayout";
 import { _ensureUserOnboarded } from "../../components/LoginState";
 import { GeneralPoster } from "../../components/Poster";
-import { useMyEnrollmentsDashboard } from "../../hooks/dashboard/myEnrollments";
+import { useMyEventsDashboard } from "../../hooks/dashboard/myEvents";
 import { IEvent } from "../../structs/Event";
 
-export const path = "/dashboard/my/enrollments";
+export const path = "/dashboard/my/events";
 
 export function Page() {
   return _ensureUserOnboarded({
-    useDataFetch: useMyEnrollmentsDashboard,
+    useDataFetch: useMyEventsDashboard,
     render: _render,
   });
 }
 
 function _render({
   events,
-  unenroll,
+  createEvent,
+  deleteEvent,
 }: {
   events: IEvent[];
-  unenroll: (event_id: number) => Promise<void>;
+  createEvent: () => Promise<void>;
+  deleteEvent: (event_id: number) => Promise<void>;
 }) {
   return (
-    <DashboardLayout current="enrollments">
-      <div className="flex flex-row items-center space-x-10 mb-10">
+    <DashboardLayout current="events">
+      <CreateNewEventButton onClick={createEvent} />
+      <div className="flex flex-row items-center space-x-10 my-10">
         {events.map((event) => (
           <GeneralPoster
             title={event.name}
             time={event.start_at}
-            del={() => unenroll(event.id)}
+            del={() => deleteEvent(event.id)}
             place={event.place}
             key={event.id}
           />

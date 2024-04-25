@@ -8,6 +8,7 @@ export interface IPersonalAfisha {
   onboard(name: string, surname: string): Promise<void>;
   getMyEnrollments(): Promise<IEvent[]>;
   createEvent(event: IEventData): Promise<{ id: number }>;
+  deleteEvent(eventId: number): Promise<void>;
   getMyEvents(): Promise<IEvent[]>;
   enroll(eventId: number): Promise<void>;
   unenroll(eventId: number): Promise<void>;
@@ -34,6 +35,11 @@ export class FirebaseAuthPersonalAfisha implements IPersonalAfisha {
   async createEvent(event: IEventData): Promise<{ id: number }> {
     const token = await ensureToken();
     return await this.backend.createEvent(token, event);
+  }
+
+  async deleteEvent(eventId: number): Promise<void> {
+    const token = await ensureToken();
+    return await this.backend.deleteEvent(token, eventId);
   }
 
   async getMyEvents(): Promise<IEvent[]> {
