@@ -62,6 +62,7 @@ export function useDashboard() {
       await personal.deleteEvent(event_id);
       _setState({
         ...state,
+        enrollments: state.createdEvents.filter((e) => e.id !== event_id),
         createdEvents: state.createdEvents.filter((e) => e.id !== event_id),
       });
     } catch (e: any) {
