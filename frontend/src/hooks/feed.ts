@@ -34,6 +34,7 @@ export function useFeed() {
     } catch (e: any) {
       if (e instanceof NotOnboarded || e instanceof CannotObtainAccessToken) {
         _setState(e);
+        return;
       }
       console.error(e);
       errorModal.open(e.message);

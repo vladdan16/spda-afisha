@@ -1,8 +1,11 @@
+export type EventType = "MEETUP" | "CONFERENCE" | "CONCERT" | "OTHER";
+export type EventTypeRu = "Митапы" | "Конференции" | "Концерты" | "Разное";
+
 export interface IEventData {
   name: string;
   description: string;
   start_at: Date;
-  type: "MEETUP" | "CONFERENCE" | "CONCERT" | "OTHER";
+  type: EventType;
   number_seats: number;
   place: string | null;
 }
@@ -18,7 +21,7 @@ export class EnrolledEvent implements IEvent {
   name: string;
   description: string;
   start_at: Date;
-  type: "MEETUP" | "CONFERENCE" | "CONCERT" | "OTHER";
+  type: EventType;
   available_seats: number;
   number_seats: number;
   place: string | null;

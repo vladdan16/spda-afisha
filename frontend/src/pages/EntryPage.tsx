@@ -37,7 +37,7 @@ export function Page() {
           {loading ? (
             <Loading />
           ) : (
-            <ContentWindow>
+            <ContentWindow w={724}>
               <PrimaryTextWhite>
                 {isRegistered ? "Вход" : "Регистрация"}
               </PrimaryTextWhite>

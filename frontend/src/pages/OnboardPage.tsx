@@ -26,7 +26,7 @@ export function Page() {
           {loading ? (
             <Loading />
           ) : (
-            <ContentWindow>
+            <ContentWindow w={724}>
               <PrimaryTextWhite>Регистрация</PrimaryTextWhite>
               <DefaultForm onSubmit={handleOnboard}>
                 <InputField

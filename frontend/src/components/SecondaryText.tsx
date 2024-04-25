@@ -10,6 +10,18 @@ export function SecondaryTextWhite({
   );
 }
 
+export function SecondaryTextWhite2({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="text-white text-2xl font-bold font-Montserrat mb-1">
+      {children}
+    </div>
+  );
+}
+
 export function SecondaryTextBlack({
   children,
 }: {

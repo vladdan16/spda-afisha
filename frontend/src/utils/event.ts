@@ -1,30 +1,40 @@
-import { EnrolledEvent } from "../structs/Event";
-
-interface EventsByCategory {
-  [category: string]: EnrolledEvent[];
-}
+import { EnrolledEvent, EventType, EventTypeRu } from "../structs/Event";
 
 export function splitEventsByCategories(
   events: EnrolledEvent[]
-): EventsByCategory {
-  const eventsByCategory: EventsByCategory = {};
+): Map<EventType, EnrolledEvent[]> {
+  const eventsByCategory = new Map<EventType, EnrolledEvent[]>();
 
   events.forEach((event) => {
     const category = event.type;
 
-    if (!eventsByCategory[category]) {
-      eventsByCategory[category] = [];
+    if (!eventsByCategory.get(category)) {
+      eventsByCategory.set(category, []);
     }
 
-    eventsByCategory[category].push(event);
+    eventsByCategory.get(category)!.push(event);
   });
 
   return eventsByCategory;
 }
 
-export const type2ru = new Map([
+export const eventTypesRu: EventTypeRu[] = [
+  "Митапы",
+  "Конференции",
+  "Концерты",
+  "Разное",
+];
+
+export const type2ru = new Map<EventType, EventTypeRu>([
   ["MEETUP", "Митапы"],
   ["CONFERENCE", "Конференции"],
   ["CONCERT", "Концерты"],
   ["OTHER", "Разное"],
+]);
+
+export const ru2type = new Map<EventTypeRu, EventType>([
+  ["Митапы", "MEETUP"],
+  ["Конференции", "CONFERENCE"],
+  ["Концерты", "CONCERT"],
+  ["Разное", "OTHER"],
 ]);

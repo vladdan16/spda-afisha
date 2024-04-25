@@ -27,11 +27,11 @@ function _render({
   return (
     <PageLayout title={"Ивенты Иннополиса"}>
       <div className="flex flex-col">
-        {Object.keys(categories).map((category) => (
+        {Array.from(categories.keys()).map((category) => (
           <div className="py-5" key={category}>
             <SecondaryTextBlack>{type2ru.get(category)}</SecondaryTextBlack>
             <div className="flex flex-row items-center">
-              {categories[category].map((event) => (
+              {categories.get(category)!.map((event) => (
                 <EnrollPoster
                   title={event.name}
                   time={event.start_at}
