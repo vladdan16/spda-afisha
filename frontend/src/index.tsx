@@ -8,8 +8,7 @@ import { ErrorModal } from "./components/ErrorModal";
 import * as Entry from "./pages/EntryPage";
 import * as Feed from "./pages/FeedPage";
 import * as Onboard from "./pages/OnboardPage";
-import * as MyEnrollmentsDashboard from "./pages/dashboard/MyEnrollments";
-import * as MyEventsDashboard from "./pages/dashboard/MyEvents";
+import * as Dashboard from "./pages/Dashboard";
 
 import { InjectAfisha } from "./components/AfishaInjector";
 import { RestAfisha, MockAfisha } from "./services/Afisha";
@@ -31,14 +30,7 @@ root.render(
         <EventCreationModal z={40}>
           <Routes>
             <Route path={Entry.path} element={<Entry.Page />} />
-            <Route
-              path={MyEnrollmentsDashboard.path}
-              element={<MyEnrollmentsDashboard.Page />}
-            />
-            <Route
-              path={MyEventsDashboard.path}
-              element={<MyEventsDashboard.Page />}
-            />
+            <Route path={Dashboard.path} element={<Dashboard.Page />} />
             <Route path={Feed.path} element={<Feed.Page />} />
             <Route path={Onboard.path} element={<Onboard.Page />} />
             <Route path="*" element={<Navigate to={Feed.path} replace />} />
