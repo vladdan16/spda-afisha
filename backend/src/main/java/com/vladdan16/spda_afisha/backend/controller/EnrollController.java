@@ -41,7 +41,7 @@ public class EnrollController {
         "uid", token.getUid(),
         "event_id", eventId.toString()
     ));
-    log.info(marker, "User successfully enrolled");
+    log.info(marker, "POST /enroll Response: OK, UID: {}, event_id: {}", token.getUid(), eventId);
 
     return ResponseEntity.ok().build();
   }
@@ -68,7 +68,7 @@ public class EnrollController {
         "uid", token.getUid(),
         "event_id", eventId.toString()
     ));
-    log.info(marker, "User successfully unenrolled");
+    log.info(marker, "DELETE /enroll Response: OK, UID: {}, event_id: {}", token.getUid(), eventId);
 
     return ResponseEntity.ok().build();
   }
@@ -89,7 +89,7 @@ public class EnrollController {
     );
 
     LabelMarker marker = LabelMarker.of("uid", token::getUid);
-    log.info(marker, "User retrieved their enrolls");
+    log.info(marker, "GET /enroll/my_enrolls Response: OK, UID: {}, Body: {}", token.getUid(), response);
 
     return ResponseEntity.ok(response);
   }

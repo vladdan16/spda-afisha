@@ -31,7 +31,7 @@ public class ImageController {
     byte[] bytes = imageService.getImage(imageName);
 
     LabelMarker marker = LabelMarker.of("image", () -> imageName);
-    log.info(marker, "Found image");
+    log.info(marker, "GET /images/{} Response: [bytes]", imageName);
 
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setContentType(MediaType.IMAGE_JPEG);

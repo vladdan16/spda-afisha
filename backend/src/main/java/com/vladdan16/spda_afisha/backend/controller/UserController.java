@@ -8,6 +8,7 @@ import com.vladdan16.spda_afisha.backend.service.FirebaseService;
 import com.vladdan16.spda_afisha.backend.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springdoc.core.service.GenericResponseService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
   private final UserService userService;
   private final FirebaseService firebaseService;
+  private final GenericResponseService responseBuilder;
 
   /**
    * Creates User
@@ -40,7 +42,7 @@ public class UserController {
     );
 
     LabelMarker marker = LabelMarker.of("uid", token::getUid);
-    log.info(marker, "User successfully created");
+    log.info(marker, "POST /user Request: {}, Response: OK, UID: {}", request, token.getUid());
 
     return ResponseEntity.ok().build();
   }
@@ -59,7 +61,7 @@ public class UserController {
     final var response = userService.getUserByUid(token.getUid());
 
     LabelMarker marker = LabelMarker.of("uid", token::getUid);
-    log.info(marker, "User successfully retrieved");
+    log.info(marker, "GET /user Response: {}, UID: {}", response, token.getUid());
 
     return ResponseEntity.ok(response);
   }
@@ -78,7 +80,7 @@ public class UserController {
     userService.deleteUserByUid(token.getUid());
 
     LabelMarker marker = LabelMarker.of("uid", token::getUid);
-    log.info(marker, "User successfully deleted");
+    log.info(marker, "DELETE /user Response: OK, UID: {}", token.getUid());
 
     return ResponseEntity.ok().build();
   }
@@ -104,7 +106,7 @@ public class UserController {
     );
 
     LabelMarker marker = LabelMarker.of("uid", token::getUid);
-    log.info(marker, "User successfully updated");
+    log.info(marker, "PATCH /user Request: {}, Response: OK, UID: {}", request, token.getUid());
 
     return ResponseEntity.ok().build();
   }

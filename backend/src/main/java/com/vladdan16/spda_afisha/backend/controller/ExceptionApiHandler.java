@@ -10,6 +10,7 @@ import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.Arrays;
 import java.util.List;
@@ -106,6 +107,19 @@ public class ExceptionApiHandler {
         e.getClass().getSimpleName(),
         e.getMessage());
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+  }
+
+  @ExceptionHandler(NoResourceFoundException.class)
+  public ResponseEntity<ApiErrorResponse> handleNoResourceFoundException(final NoResourceFoundException e) {
+    LabelMarker marker = LabelMarker.of("error_code", () -> "404");
+    log.info(marker, e.getMessage());
+
+    ApiErrorResponse response = new ApiErrorResponse(
+        "No static resource",
+        "404",
+        e.getClass().getSimpleName(),
+        e.getMessage());
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
   }
 
   @ExceptionHandler(Exception.class)

@@ -51,7 +51,7 @@ public class EventController {
     LabelMarker marker = LabelMarker.of(() -> Map.of(
         "uid", token.getUid(),
         "event_id", id.toString()));
-    log.info(marker, "User created event");
+    log.info(marker, "POST /event Request: {}, Response: {}, UID: {}", request, id, token.getUid());
 
     return ResponseEntity.ok(id);
   }
@@ -65,7 +65,7 @@ public class EventController {
   public ResponseEntity<ListEventResponse> listEvents() {
     var response = eventService.listEvents();
 
-    log.info("List of events retrieved");
+    log.info("GET /event/list Response: {}", response);
 
     return ResponseEntity.ok(response);
   }
@@ -88,7 +88,7 @@ public class EventController {
     LabelMarker marker = LabelMarker.of(() -> Map.of(
         "uid", token.getUid(),
         "event_id", eventId.toString()));
-    log.info(marker, "User deleted event");
+    log.info(marker, "DELETE /event Response: OK, event_id: {}, UID: {}", eventId, token.getUid());
 
     return ResponseEntity.ok().build();
   }
@@ -104,7 +104,7 @@ public class EventController {
     var response = eventService.getEvent(eventId);
 
     LabelMarker marker = LabelMarker.of("event_id", eventId::toString);
-    log.info(marker, "Event retrieved");
+    log.info(marker, "GET /event/{} Response: {}", eventId, response);
 
     return ResponseEntity.ok(response);
   }
@@ -136,7 +136,7 @@ public class EventController {
     LabelMarker marker = LabelMarker.of(() -> Map.of(
         "uid", token.getUid(),
         "event_id", request.id().toString()));
-    log.info(marker, "User updated event");
+    log.info(marker, "PATCH /event Request: {}, Response: OK, UID: {}", request, token.getUid());
 
     return ResponseEntity.ok().build();
   }
@@ -163,7 +163,7 @@ public class EventController {
         "uid", token.getUid(),
         "event_id", eventId.toString(),
         "image", imageName));
-    log.info(marker, "User uploaded image");
+    log.info(marker, "POST /event/{}/image Response: {}, UID: {}", eventId, imageName, token.getUid());
 
     return ResponseEntity.ok(imageName);
   }
@@ -187,7 +187,7 @@ public class EventController {
     eventService.deleteImages(eventId, token.getUid(), request.images());
 
     LabelMarker marker = LabelMarker.of("uid", token::getUid);
-    log.info(marker, "User deleted images {}", request.images().toString());
+    log.info(marker, "POST /event/{}/delete_images Request: {}, Response: OK, UID: {}", eventId, request, token.getUid());
 
     return ResponseEntity.ok().build();
   }
@@ -206,7 +206,7 @@ public class EventController {
     final var response = eventService.listMyEvents(token.getUid());
 
     LabelMarker marker = LabelMarker.of("uid", token::getUid);
-    log.info(marker, "User retrieved their events");
+    log.info(marker, "GET /event/my_events Response: {}, UID: {}", response, token.getUid());
 
     return ResponseEntity.ok(response);
   }
