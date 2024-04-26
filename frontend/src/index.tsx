@@ -14,7 +14,7 @@ import { InjectAfisha } from "./components/AfishaInjector";
 import { RestAfisha, MockAfisha } from "./services/Afisha";
 import { afishaApi } from "./config";
 import { FirebaseAuthPersonalAfisha } from "./services/PersonalAfisha";
-import { EventCreationModal } from "./components/EventCreationModal";
+import { EventModal } from "./components/EventModal";
 import { ParticipantsModal } from "./components/ParticipantsModal";
 
 const rawAfisha =
@@ -28,7 +28,7 @@ root.render(
   <BrowserRouter>
     <InjectAfisha rawApi={rawAfisha} personal={personalAfisha}>
       <ErrorModal z={50}>
-        <EventCreationModal z={40}>
+        <EventModal z={40}>
           <ParticipantsModal z={30}>
             <Routes>
               <Route path={Entry.path} element={<Entry.Page />} />
@@ -38,7 +38,7 @@ root.render(
               <Route path="*" element={<Navigate to={Feed.path} replace />} />
             </Routes>
           </ParticipantsModal>
-        </EventCreationModal>
+        </EventModal>
       </ErrorModal>
     </InjectAfisha>
   </BrowserRouter>

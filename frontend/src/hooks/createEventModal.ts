@@ -1,67 +1,95 @@
 import { useContext, useState } from "react";
-import { IEvent, IEventData } from "../structs/Event";
+import { IEventData, IIdEventData } from "../structs/Event";
 import { AfishaContext } from "../contexts/Afisha";
 import { ErrorModalContext } from "../contexts/ErrorModal";
 
-export function useCreateEventModal() {
+export function useEventModal() {
   const errorModal = useContext(ErrorModalContext)!;
   const { personal } = useContext(AfishaContext)!;
 
   const [state, setState] = useState<{
-    data: IEventData;
+    event:
+      | {
+          type: "edit";
+          data: IIdEventData;
+        }
+      | {
+          type: "create";
+          data: IEventData;
+        };
+    resolve: (res: IIdEventData | null) => void;
     loading: boolean;
-    complete: (res: IEvent | null) => void;
   } | null>(null);
 
-  function open() {
+  function _complete(value: IIdEventData | null) {
+    if (state === null)
+      throw new Error("Trying to complete event modal when it is already open");
+    state.resolve(value);
+    setState(null);
+  }
+
+  function openCreate() {
     if (state !== null)
-      throw new Error(
-        "Trying to open event creation modal when it is already open"
-      );
-    return new Promise<IEvent | null>((resolve) => {
+      throw new Error("Trying to open event modal when it is already open");
+    return new Promise<IIdEventData | null>((resolve) => {
       console.assert(state === null);
       setState({
-        data: {
-          name: "",
-          description: "",
-          start_at: new Date(),
-          type: "OTHER",
-          number_seats: 10,
-          place: null,
+        event: {
+          type: "create",
+          data: {
+            name: "",
+            description: "",
+            start_at: new Date(),
+            type: "OTHER",
+            number_seats: 10,
+            place: null,
+          },
         },
+        resolve: resolve,
         loading: false,
-        complete: (value) => {
-          resolve(value);
-          setState(null);
+      });
+    });
+  }
+
+  function openEdit(data: IIdEventData) {
+    if (state !== null)
+      throw new Error("Trying to open event modal when it is already open");
+    return new Promise<IIdEventData | null>((resolve) => {
+      console.assert(state === null);
+      setState({
+        event: {
+          type: "edit",
+          data: data,
         },
+        resolve: resolve,
+        loading: false,
       });
     });
   }
 
   function close() {
     if (state === null)
-      throw new Error(
-        "Trying to close event creation modal when it is already closed"
-      );
+      throw new Error("Trying to close event modal when it is already closed");
     if (state.loading) return;
-    state.complete(null);
+    _complete(null);
   }
 
   async function submit() {
     if (state === null)
-      throw new Error(
-        "Trying to submit on event creation modal when it is closed"
-      );
+      throw new Error("Trying to submit on event modal when it is closed");
     if (state.loading) return;
     setState({ ...state, loading: true });
     try {
-      const { id } = await personal.createEvent(state.data);
-      state.complete({
-        ...state.data,
-        id: id,
-        available_seats: state.data.number_seats,
-        images: [],
-      }); // sets state to null
+      if (state.event.type === "create") {
+        const { id } = await personal.createEvent(state.event.data);
+        _complete({
+          ...state.event.data,
+          id: id,
+        });
+      } else {
+        await personal.editEvent(state.event.data);
+        _complete(state.event.data);
+      }
     } catch (e: any) {
       console.error(e);
       errorModal.open(e.message);
@@ -71,17 +99,25 @@ export function useCreateEventModal() {
 
   function update(data: IEventData) {
     if (state === null)
-      throw new Error(
-        "Trying to update event creation modal when it is closed"
-      );
+      throw new Error("Trying to update event modal when it is closed");
     if (state.loading) return;
-    setState({ ...state, data });
+    if (state.event.type === "create") {
+      setState({
+        ...state,
+        event: { ...state.event, data: data },
+      });
+    } else {
+      setState({
+        ...state,
+        event: { ...state.event, data: { id: state.event.data.id, ...data } },
+      });
+    }
   }
 
   return state === null
-    ? { open }
+    ? { openCreate, openEdit }
     : {
-        data: state.data,
+        event: state.event,
         loading: state.loading,
         update,
         close,

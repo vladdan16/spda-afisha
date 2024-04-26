@@ -1,6 +1,6 @@
 // tags: [SERVICE, SERVICE_INTERFACE, SERVICE_IMPL]
 
-import { IEvent, IEventData } from "../structs/Event";
+import { IEvent, IEventData, IIdEventData } from "../structs/Event";
 import { IAfisha } from "./Afisha";
 import { ensureToken } from "./Authenticator";
 
@@ -8,6 +8,7 @@ export interface IPersonalAfisha {
   onboard(name: string, surname: string): Promise<void>;
   getMyEnrollments(): Promise<IEvent[]>;
   createEvent(event: IEventData): Promise<{ id: number }>;
+  editEvent(event: IIdEventData): Promise<void>;
   deleteEvent(eventId: number): Promise<void>;
   getMyEvents(): Promise<IEvent[]>;
   enroll(eventId: number): Promise<void>;
@@ -35,6 +36,11 @@ export class FirebaseAuthPersonalAfisha implements IPersonalAfisha {
   async createEvent(event: IEventData): Promise<{ id: number }> {
     const token = await ensureToken();
     return await this.backend.createEvent(token, event);
+  }
+
+  async editEvent(event: IIdEventData): Promise<void> {
+    const token = await ensureToken();
+    return await this.backend.editEvent(token, event);
   }
 
   async deleteEvent(eventId: number): Promise<void> {

@@ -1,13 +1,14 @@
 // tags: [SERVICE, SERVICE_INTERFACE, SERVICE_IMPLs]
 
 import axios, { AxiosError, AxiosInstance } from "axios";
-import { IEvent, IEventData } from "../structs/Event";
+import { IEvent, IEventData, IIdEventData } from "../structs/Event";
 import { delay } from "../utils/async";
 import { NotOnboarded } from "../exceptions/afisha";
 
 export interface IAfisha {
   getEventsList(): Promise<IEvent[]>;
   createEvent(accessToken: string, event: IEventData): Promise<{ id: number }>;
+  editEvent(accessToken: string, event: IIdEventData): Promise<void>;
   deleteEvent(accessToken: string, eventId: number): Promise<void>;
   getMyEvents(accessToken: string): Promise<IEvent[]>;
   getMyEnrollments(accessToken: string): Promise<IEvent[]>;
@@ -102,6 +103,16 @@ export class RestAfisha implements IAfisha {
         },
       });
       return { id: response.data };
+    });
+  }
+
+  editEvent(accessToken: string, event: IIdEventData): Promise<void> {
+    return RestAfisha.convertErrors(async () => {
+      await this.axiosInstance.patch("/event", event, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
     });
   }
 
@@ -207,6 +218,10 @@ export class MockAfisha implements IAfisha {
 
   async createEvent(): Promise<{ id: number }> {
     await delay([], 1000);
+    throw new Error("Method not implemented.");
+  }
+
+  editEvent(accessToken: string, event: IIdEventData): Promise<void> {
     throw new Error("Method not implemented.");
   }
 

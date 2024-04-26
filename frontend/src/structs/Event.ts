@@ -10,8 +10,11 @@ export interface IEventData {
   place: string | null;
 }
 
-export interface IEvent extends IEventData {
+export interface IIdEventData extends IEventData {
   id: number;
+}
+
+export interface IEvent extends IIdEventData {
   available_seats: number;
   images: string[];
 }

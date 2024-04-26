@@ -1,5 +1,8 @@
 import { useContext, useEffect, useState } from "react";
-import { EventCreationModalContext } from "../contexts/EventCreationModal";
+import {
+  EventCreationModalContext,
+  EventEditModalContext,
+} from "../contexts/EventModal";
 import { ErrorModalContext } from "../contexts/ErrorModal";
 import { AfishaContext } from "../contexts/Afisha";
 import { IEvent } from "../structs/Event";
@@ -10,6 +13,7 @@ import { ParticipantsModalContext } from "../contexts/ParticipantsModal";
 export function useDashboard() {
   const errorModal = useContext(ErrorModalContext)!;
   const eventCreationModal = useContext(EventCreationModalContext)!;
+  const eventEditModal = useContext(EventEditModalContext)!;
   const participantsModal = useContext(ParticipantsModalContext)!;
   const { personal } = useContext(AfishaContext)!;
 
@@ -48,8 +52,15 @@ export function useDashboard() {
       return;
     }
 
-    const newEvent = await eventCreationModal.open();
-    if (newEvent === null) return;
+    const rawNewEvent = await eventCreationModal.open();
+    if (rawNewEvent === null) return;
+
+    const newEvent: IEvent = {
+      ...rawNewEvent,
+      images: [],
+      available_seats: rawNewEvent.number_seats,
+    };
+
     _setState({
       ...state,
       createdEvents: [...state.createdEvents, newEvent],
@@ -83,11 +94,25 @@ export function useDashboard() {
     participantsModal.open(event.name, event.start_at, ["Name Secondname"]);
   }
 
-  function editEvent(eventId: number) {
+  async function editEvent(eventId: number) {
     if (state instanceof Error || state === undefined) {
       return;
     }
-    // TODO: popup event editor modal
+    const rawInitialEvent = state.createdEvents.find(
+      (event) => event.id === eventId
+    )!;
+    const rawEditedEvent = await eventEditModal.open(rawInitialEvent);
+    const editedEvent = { ...rawInitialEvent, ...rawEditedEvent };
+
+    _setState({
+      ...state,
+      createdEvents: state.createdEvents.map((e) =>
+        e.id === editedEvent.id ? editedEvent : e
+      ),
+      enrollments: state.enrollments.map((e) =>
+        e.id === editedEvent.id ? editedEvent : e
+      ),
+    });
   }
 
   async function unenroll(eventId: number) {
