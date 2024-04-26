@@ -38,32 +38,34 @@ export function Page() {
             <Loading />
           ) : (
             <ContentWindow w={724}>
-              <PrimaryTextWhite>
-                {isRegistered ? "Вход" : "Регистрация"}
-              </PrimaryTextWhite>
-              <DefaultForm onSubmit={handleAuth}>
-                <InputField
-                  type="email"
-                  placeholder="Email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-                <InputField
-                  type="password"
-                  placeholder="Пароль"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-                <CenterW>
-                  <ElevatedButton type="submit" onClick={undefined}>
-                    {isRegistered ? "Войти" : "Зарегистрироваться"}
-                  </ElevatedButton>
-                </CenterW>
-              </DefaultForm>
-              <SecondaryTextWhite>или</SecondaryTextWhite>
-              <InkWellButton onClick={toggleRegistration} type="button">
-                {isRegistered ? "зарегистрироваться" : "войти"}
-              </InkWellButton>
+              <div className="w-[724px] px-20 flex flex-col items-center">
+                <PrimaryTextWhite>
+                  {isRegistered ? "Вход" : "Регистрация"}
+                </PrimaryTextWhite>
+                <DefaultForm onSubmit={handleAuth}>
+                  <InputField
+                    type="email"
+                    placeholder="Email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                  <InputField
+                    type="password"
+                    placeholder="Пароль"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                  <CenterW>
+                    <ElevatedButton type="submit" onClick={undefined}>
+                      {isRegistered ? "Войти" : "Зарегистрироваться"}
+                    </ElevatedButton>
+                  </CenterW>
+                </DefaultForm>
+                <SecondaryTextWhite>или</SecondaryTextWhite>
+                <InkWellButton onClick={toggleRegistration} type="button">
+                  {isRegistered ? "зарегистрироваться" : "войти"}
+                </InkWellButton>
+              </div>
             </ContentWindow>
           )}
         </CenterH>

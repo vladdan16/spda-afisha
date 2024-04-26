@@ -27,26 +27,28 @@ export function Page() {
             <Loading />
           ) : (
             <ContentWindow w={724}>
-              <PrimaryTextWhite>Регистрация</PrimaryTextWhite>
-              <DefaultForm onSubmit={handleOnboard}>
-                <InputField
-                  type="text"
-                  placeholder="Имя"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                />
-                <InputField
-                  type="text"
-                  placeholder="Фамилия"
-                  value={surname}
-                  onChange={(e) => setSurname(e.target.value)}
-                />
-                <CenterW>
-                  <ElevatedButton type="submit" onClick={undefined}>
-                    Зарегистрироваться
-                  </ElevatedButton>
-                </CenterW>
-              </DefaultForm>
+              <div className="w-[724px] px-20 flex flex-col items-center">
+                <PrimaryTextWhite>Регистрация</PrimaryTextWhite>
+                <DefaultForm onSubmit={handleOnboard}>
+                  <InputField
+                    type="text"
+                    placeholder="Имя"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                  />
+                  <InputField
+                    type="text"
+                    placeholder="Фамилия"
+                    value={surname}
+                    onChange={(e) => setSurname(e.target.value)}
+                  />
+                  <CenterW>
+                    <ElevatedButton type="submit" onClick={undefined}>
+                      Зарегистрироваться
+                    </ElevatedButton>
+                  </CenterW>
+                </DefaultForm>
+              </div>
             </ContentWindow>
           )}
         </CenterH>
