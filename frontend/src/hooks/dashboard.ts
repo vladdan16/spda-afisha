@@ -5,7 +5,7 @@ import {
 } from "../contexts/EventModal";
 import { ErrorModalContext } from "../contexts/ErrorModal";
 import { AfishaContext } from "../contexts/Afisha";
-import { IEvent } from "../structs/Event";
+import { IEvent, IEventWithUsers } from "../structs/Event";
 import { CannotObtainAccessToken } from "../exceptions/authentication";
 import { NotOnboarded } from "../exceptions/afisha";
 import { ParticipantsModalContext } from "../contexts/ParticipantsModal";
@@ -19,7 +19,7 @@ export function useDashboard() {
 
   const [state, _setState] = useState<
     | {
-        createdEvents: IEvent[];
+        createdEvents: IEventWithUsers[];
         enrollments: IEvent[];
         chosen: "enrollments" | "events";
       }
@@ -55,10 +55,11 @@ export function useDashboard() {
     const rawNewEvent = await eventCreationModal.open();
     if (rawNewEvent === null) return;
 
-    const newEvent: IEvent = {
+    const newEvent: IEventWithUsers = {
       ...rawNewEvent,
       images: [],
       available_seats: rawNewEvent.number_seats,
+      enrolled_users: [],
     };
 
     _setState({
@@ -90,8 +91,11 @@ export function useDashboard() {
       return;
     }
     const event = state.createdEvents.find((e) => e.id === eventId)!;
-    // TODO: method for getting the participants
-    participantsModal.open(event.name, event.start_at, ["Name Secondname"]);
+    participantsModal.open(
+      event.name,
+      event.start_at,
+      event.enrolled_users.map((u) => `${u.name} ${u.surname}`)
+    );
   }
 
   async function editEvent(eventId: number) {

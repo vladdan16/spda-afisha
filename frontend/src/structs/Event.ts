@@ -1,3 +1,5 @@
+import { IUser } from "./IUser";
+
 export type EventType = "MEETUP" | "CONFERENCE" | "CONCERT" | "OTHER";
 export type EventTypeRu = "Митапы" | "Конференции" | "Концерты" | "Разное";
 
@@ -17,6 +19,10 @@ export interface IIdEventData extends IEventData {
 export interface IEvent extends IIdEventData {
   available_seats: number;
   images: string[];
+}
+
+export interface IEventWithUsers extends IEvent {
+  enrolled_users: IUser[];
 }
 
 export class EnrolledEvent implements IEvent {
