@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/spda-afisha/static/css/main.88aca28b.css",
+    "main.js": "/spda-afisha/static/js/main.fa2fea00.js",
+    "index.html": "/spda-afisha/index.html",
+    "main.88aca28b.css.map": "/spda-afisha/static/css/main.88aca28b.css.map",
+    "main.fa2fea00.js.map": "/spda-afisha/static/js/main.fa2fea00.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.88aca28b.css",
+    "static/js/main.fa2fea00.js"
+  ]
+}
