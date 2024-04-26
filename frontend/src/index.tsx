@@ -12,7 +12,7 @@ import * as Dashboard from "./pages/Dashboard";
 
 import { InjectAfisha } from "./components/AfishaInjector";
 import { RestAfisha, MockAfisha } from "./services/Afisha";
-import { basename, afishaApi } from "./config";
+import { afishaApi } from "./config";
 import { FirebaseAuthPersonalAfisha } from "./services/PersonalAfisha";
 import { EventModal } from "./components/EventModal";
 import { ParticipantsModal } from "./components/ParticipantsModal";
@@ -25,7 +25,7 @@ const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 root.render(
-  <BrowserRouter basename={basename}>
+  <BrowserRouter>
     <InjectAfisha rawApi={rawAfisha} personal={personalAfisha}>
       <ErrorModal z={50}>
         <EventModal z={40}>
